@@ -1,7 +1,16 @@
 package com.example.germanbridgescoreboard
 
+import kotlin.math.floor
+
 class Game (var playerCount: Int){
-    var playerName: ArrayList<String> = arrayListOf()
-    var players: ArrayList<Player> = arrayListOf()
-    var rounds: Int = Math.floor(52.0/playerCount).toInt()
+    private var playerName: ArrayList<String> = arrayListOf()
+    private var players: ArrayList<Player> = arrayListOf()
+    var rounds: Int = floor(52.0/playerCount).toInt()
+
+    fun addPlayer(name: String){
+        playerName.add(name)
+        players.add(Player(name))
+    }
+
+
 }

@@ -4,4 +4,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_scoreboard">Scoreboard</string>
+    <string name="game_ongoing">A game is ongoing</string>
+    <string name="number_of_players">Number of Players</string>
+    <string name="init_game">Initialize Game</string>
 </resources>
