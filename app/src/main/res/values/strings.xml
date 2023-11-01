@@ -7,4 +7,6 @@
     <string name="game_ongoing">A game is ongoing</string>
     <string name="number_of_players">Number of Players</string>
     <string name="init_game">Initialize Game</string>
+    <string name="player">Player</string>
+    <string name="name">Name</string>
 </resources>
