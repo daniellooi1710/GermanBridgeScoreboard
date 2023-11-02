@@ -16,7 +16,6 @@ class GameAdapter(var playerCount: Int) : RecyclerView.Adapter<GameAdapter.ViewH
             textView = view.findViewById(R.id.player_num)
             textInputLayout = view.findViewById(R.id.input_player_name)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameAdapter.ViewHolder {
