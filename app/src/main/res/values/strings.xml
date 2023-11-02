@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">German Bridge Scoreboard</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_bids_outcomes">Bids/Outcomes</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_scoreboard">Scoreboard</string>
     <string name="game_ongoing">A game is ongoing</string>

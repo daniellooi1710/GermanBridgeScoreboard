@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.germanbridgescoreboard.Game
 import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentHomeBinding
+import com.example.germanbridgescoreboard.ui.gameinit.InputPlayerFragment
 
 class HomeFragment : Fragment() {
 
@@ -49,28 +50,25 @@ class HomeFragment : Fragment() {
             }
         }
 
+        binding.button4.setOnClickListener {
+            val num = binding.editTextNumber.text.toString().toInt()
+            var game = Game(num)
+            var fragment = InputPlayerFragment()
+            var fm = activity?.supportFragmentManager
+            var ft = fm?.beginTransaction()
+            if (ft != null) {
+                ft.replace(R.id.nav_host_fragment_activity_main, fragment)
+                ft.addToBackStack(null)
+                ft.commit()
+            }
+        }
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    fun minusNum(view: View) {
-        var num = view.findViewById<EditText>(R.id.editTextNumber).text.toString().toInt()
-        if (num > 2) {
-            num--
-            view.findViewById<EditText>(R.id.editTextNumber).setText(num.toString())
-        }
-    }
-
-    fun addNum(view: View) {
-        var num = view.findViewById<EditText>(R.id.editTextNumber).text.toString().toInt()
-        if (num < 12) {
-            num++
-            view.findViewById<EditText>(R.id.editTextNumber).setText(num.toString())
-        }
     }
 
 }

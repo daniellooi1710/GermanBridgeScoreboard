@@ -21,7 +21,7 @@ class GameAdapter(var playerCount: Int) : RecyclerView.Adapter<GameAdapter.ViewH
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameAdapter.ViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
-        val playerInputView = inflater.inflate(R.layout.item_game_init, parent, false)
+        val playerInputView = inflater.inflate(R.layout.fragment_game_init, parent, false)
         return ViewHolder(playerInputView)
     }
 
