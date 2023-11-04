@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 import com.example.germanbridgescoreboard.placeholder.PlaceholderContent.PlaceholderItem
-import com.example.germanbridgescoreboard.databinding.FragmentItemBinding
+import com.example.germanbridgescoreboard.databinding.FragmentInputBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
@@ -19,7 +19,7 @@ class InputPlayerRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return ViewHolder(
-            FragmentItemBinding.inflate(
+            FragmentInputBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -30,19 +30,12 @@ class InputPlayerRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
     }
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
+    inner class ViewHolder(binding: FragmentInputBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
-        }
     }
 
 }
