@@ -14,7 +14,7 @@ class GameAdapter(var playerCount: Int) : RecyclerView.Adapter<GameAdapter.ViewH
 
         init{
             textView = view.findViewById(R.id.player_num)
-            textInputLayout = view.findViewById(R.id.input_player_name)
+            textInputLayout = view.findViewById(R.id.input_player_name_field)
         }
     }
 

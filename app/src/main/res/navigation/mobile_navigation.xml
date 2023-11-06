@@ -12,24 +12,48 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_navigation_home_to_itemFragment"
-            app:destination="@id/itemFragment" />
+            app:destination="@id/navigation_game_init" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_scoreboard"
+            app:destination="@id/navigation_scoreboard" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_bids_outcomes"
+            app:destination="@id/navigation_bids_outcomes" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_bids_outcomes"
         android:name="com.example.germanbridgescoreboard.ui.bidoutcome.BidsOutcomesFragment"
         android:label="@string/title_bids_outcomes"
-        tools:layout="@layout/fragment_bids_outcomes" />
+        tools:layout="@layout/fragment_bids_outcomes" >
+        <action
+            android:id="@+id/action_navigation_bids_outcomes_to_navigation_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_bids_outcomes_to_navigation_scoreboard"
+            app:destination="@id/navigation_scoreboard" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_scoreboard"
         android:name="com.example.germanbridgescoreboard.ui.scoreboard.ScoreboardFragment"
         android:label="@string/title_scoreboard"
-        tools:layout="@layout/fragment_scoreboard" />
+        tools:layout="@layout/fragment_scoreboard" >
+        <action
+            android:id="@+id/action_navigation_scoreboard_to_navigation_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_scoreboard_to_navigation_bids_outcomes"
+            app:destination="@id/navigation_bids_outcomes" />
+    </fragment>
 
     <fragment
-        android:id="@+id/itemFragment"
+        android:id="@+id/navigation_game_init"
         android:name="com.example.germanbridgescoreboard.ui.gameinit.InputPlayerFragment"
-        android:label="fragment_item_game_init"
-        tools:layout="@layout/fragment_game_init" />
+        android:label="@string/input_name"
+        tools:layout="@layout/fragment_game_init" >
+        <action
+            android:id="@+id/action_navigation_game_init_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 </navigation>

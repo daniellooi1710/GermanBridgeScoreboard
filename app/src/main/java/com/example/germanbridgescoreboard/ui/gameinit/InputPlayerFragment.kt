@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.placeholder.PlaceholderContent
+import com.example.germanbridgescoreboard.ui.home.HomeViewModel
 
-/** A fragment representing a list of Items */
 class InputPlayerFragment : Fragment() {
-
-    private var columnCount = 2
+    private lateinit var viewmodel: InputPlayerViewModel
+    private var columnCount = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,7 @@ class InputPlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewmodel = ViewModelProvider(this)[InputPlayerViewModel::class.java]
         val view = inflater.inflate(R.layout.fragment_game_init, container, false)
 
         // Set the adapter
@@ -37,7 +39,7 @@ class InputPlayerFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = InputPlayerRecyclerViewAdapter(PlaceholderContent.ITEMS)
+                adapter = InputPlayerRecyclerViewAdapter(viewmodel.game)
             }
         }
         return view
