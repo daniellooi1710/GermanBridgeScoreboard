@@ -5,6 +5,5 @@ import com.example.germanbridgescoreboard.Game
 import com.example.germanbridgescoreboard.ui.home.HomeViewModel
 
 class InputPlayerViewModel: ViewModel() {
-    var game = HomeViewModel.game
 
 }

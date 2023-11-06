@@ -17,6 +17,7 @@ class InputPlayerRecyclerViewAdapter(var game: Game) : RecyclerView.Adapter<Inpu
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.append(position)
+        holder.getName(position)
     }
 
     override fun getItemCount(): Int = game.playerCount

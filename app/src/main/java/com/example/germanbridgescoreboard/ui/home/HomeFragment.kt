@@ -14,7 +14,7 @@ import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
-    private lateinit var viewmodel: HomeViewModel
+    private lateinit var viewmodel: MainViewModel
     private var _binding: FragmentHomeBinding? = null
 
     // This property is only valid between onCreateView and onDestroyView.
@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        viewmodel = ViewModelProvider(this)[HomeViewModel::class.java]
+        viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root

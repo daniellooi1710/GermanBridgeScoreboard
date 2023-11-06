@@ -1,14 +1,17 @@
 package com.example.germanbridgescoreboard
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.germanbridgescoreboard.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -30,12 +33,14 @@ class MainActivity : AppCompatActivity() {
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        if(navController.currentDestination?.id == R.id.navigation_game_init){
+
+        /*if(navController.currentDestination?.id == R.id.navigation_game_init){
+            val toolbar: Toolbar = findViewById(androidx.constraintlayout.widget.R.id.action_bar)
+            toolbar.inflateMenu(R.menu.toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        }*/
 
         navView.setupWithNavController(navController)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -46,7 +51,11 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(R.id.action_navigation_game_init_to_navigation_home)
                 return true
             }
+            R.id.toolbarButton -> {
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

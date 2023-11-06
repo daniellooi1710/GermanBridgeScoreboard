@@ -6,30 +6,32 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.example.germanbridgescoreboard.R
-import com.example.germanbridgescoreboard.placeholder.PlaceholderContent
-import com.example.germanbridgescoreboard.ui.home.HomeViewModel
+import com.example.germanbridgescoreboard.databinding.FragmentGameInitBinding
+import com.example.germanbridgescoreboard.ui.home.MainViewModel
+import com.example.germanbridgescoreboard.ui.home.MainViewModel.Companion.game
 
 class InputPlayerFragment : Fragment() {
-    private lateinit var viewmodel: InputPlayerViewModel
+    private lateinit var viewmodel: MainViewModel
     private var columnCount = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewmodel = ViewModelProvider(this)[InputPlayerViewModel::class.java]
+        viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
         val view = inflater.inflate(R.layout.fragment_game_init, container, false)
 
         // Set the adapter
@@ -39,25 +41,23 @@ class InputPlayerFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = InputPlayerRecyclerViewAdapter(viewmodel.game)
+                adapter = InputPlayerRecyclerViewAdapter(game)
             }
         }
         return view
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar, menu)
+    }
 
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            InputPlayerFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
+    @Deprecated("Deprecated in Java")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id: Int = item.itemId
+        if(id == R.id.toolbarButton){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
