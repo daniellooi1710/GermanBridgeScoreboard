@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.germanbridgescoreboard.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    lateinit var game: Game
 
     private lateinit var binding: ActivityMainBinding
 

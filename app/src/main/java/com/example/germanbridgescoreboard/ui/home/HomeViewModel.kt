@@ -8,9 +8,13 @@ import com.example.germanbridgescoreboard.Game
 import com.example.germanbridgescoreboard.R
 
 class HomeViewModel : ViewModel() {
+    var playerNum = MutableLiveData<Int>(2)
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    fun add(){
+        playerNum.value = playerNum.value?.plus(1)
     }
-    val text: LiveData<String> = _text
+
+    fun minus(){
+        playerNum.value = playerNum.value?.minus(1)
+    }
 }

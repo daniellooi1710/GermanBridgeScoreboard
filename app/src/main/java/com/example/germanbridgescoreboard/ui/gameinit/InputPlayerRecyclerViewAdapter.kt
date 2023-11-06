@@ -1,9 +1,8 @@
-package com.example.germanbridgescoreboard
+package com.example.germanbridgescoreboard.ui.gameinit
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 
 import com.example.germanbridgescoreboard.placeholder.PlaceholderContent.PlaceholderItem
 import com.example.germanbridgescoreboard.databinding.FragmentInputBinding

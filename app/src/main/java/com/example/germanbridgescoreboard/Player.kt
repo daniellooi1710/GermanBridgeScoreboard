@@ -2,10 +2,10 @@ package com.example.germanbridgescoreboard
 
 import kotlin.math.absoluteValue
 
-class Player (var name: String){
-    private var bid: ArrayList<Int> = arrayListOf()
-    private var win: ArrayList<Int> = arrayListOf()
-    private var score: ArrayList<Int> = arrayListOf()
+class Player (var name: String, rounds: Int){
+    private var bid = IntArray(rounds)
+    private var win = IntArray(rounds)
+    private var score = IntArray(rounds)
     private var winStreak: Int = 0
     private var total: Int = 0
 
@@ -17,20 +17,12 @@ class Player (var name: String){
         this.bid[round] = bid
     }
 
-    fun addBid(bid: Int){
-        this.bid.add(bid)
-    }
-
     fun getWin(round: Int): Int{
         return win[round]
     }
 
     fun setWin(round: Int, win: Int){
         this.win[round] = win
-    }
-
-    fun addWin(win: Int){
-        this.win.add(win)
     }
 
     fun getScore(bid: Int, win: Int): Int{
@@ -49,9 +41,6 @@ class Player (var name: String){
         this.score[round] = score
     }
 
-    fun addScore(score: Int){
-        this.score.add(score)
-    }
 
     fun updateWinStreak(round: Int){
         if (bid[round] == win[round]) winStreak++ else winStreak = 0

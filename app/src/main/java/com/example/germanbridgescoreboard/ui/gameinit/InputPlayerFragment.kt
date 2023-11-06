@@ -8,13 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.germanbridgescoreboard.InputPlayerRecyclerViewAdapter
 import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.placeholder.PlaceholderContent
 
-/**
- * A fragment representing a list of Items.
- */
+/** A fragment representing a list of Items */
 class InputPlayerFragment : Fragment() {
 
     private var columnCount = 2
