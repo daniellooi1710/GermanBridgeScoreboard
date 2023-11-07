@@ -1,5 +1,6 @@
 package com.example.germanbridgescoreboard.ui.home
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentHomeBinding
@@ -29,6 +31,17 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        viewmodel.gameStarted.observe(viewLifecycleOwner, Observer{
+            if(viewmodel.gameStarted.value!!){
+                binding.textView.setBackgroundColor(Color.GREEN)
+                binding.textView.setText(R.string.game_ongoing)
+            }
+            else{
+                binding.textView.setBackgroundColor(Color.YELLOW)
+                binding.textView.setText(R.string.init_game)
+            }
+        })
 
         val playerNumDisplay: EditText = binding.editTextNumber
         viewmodel.playerNum.observe(viewLifecycleOwner, Observer {

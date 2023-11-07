@@ -1,11 +1,12 @@
 package com.example.germanbridgescoreboard.ui.gameinit
 
-import androidx.recyclerview.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.RecyclerView
 import com.example.germanbridgescoreboard.Game
-
-import com.example.germanbridgescoreboard.placeholder.PlaceholderContent.PlaceholderItem
 import com.example.germanbridgescoreboard.databinding.FragmentInputBinding
 
 class InputPlayerRecyclerViewAdapter(var game: Game) : RecyclerView.Adapter<InputPlayerRecyclerViewAdapter.ViewHolder>() {
@@ -17,10 +18,11 @@ class InputPlayerRecyclerViewAdapter(var game: Game) : RecyclerView.Adapter<Inpu
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.append(position)
-        holder.getName(position)
+        holder.bindName(position)
     }
 
     override fun getItemCount(): Int = game.playerCount
+
 
     inner class ViewHolder(binding: FragmentInputBinding) : RecyclerView.ViewHolder(binding.root) {
         var myTextView = binding.playerNum
@@ -32,9 +34,23 @@ class InputPlayerRecyclerViewAdapter(var game: Game) : RecyclerView.Adapter<Inpu
             myTextView.text = text
         }
 
-        fun getName(position: Int){
-            val name = myTextInputEditText.text.toString()
-            game.players[position].name = name
+
+        fun bindName(position: Int){
+            myTextInputEditText.addTextChangedListener {object:  TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun afterTextChanged(text: Editable?) {
+                    game.players[position].name = text.toString()
+                }
+
+            }
+            }
         }
     }
 

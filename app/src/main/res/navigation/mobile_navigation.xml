@@ -55,5 +55,8 @@
         <action
             android:id="@+id/action_navigation_game_init_to_navigation_home"
             app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_game_init_to_navigation_bids_outcomes"
+            app:destination="@id/navigation_bids_outcomes" />
     </fragment>
 </navigation>

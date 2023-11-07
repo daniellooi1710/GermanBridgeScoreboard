@@ -6,11 +6,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.NavDestination
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.germanbridgescoreboard.databinding.ActivityMainBinding
+import com.example.germanbridgescoreboard.ui.home.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -34,12 +37,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        /*if(navController.currentDestination?.id == R.id.navigation_game_init){
-            val toolbar: Toolbar = findViewById(androidx.constraintlayout.widget.R.id.action_bar)
-            toolbar.inflateMenu(R.menu.toolbar)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }*/
-
         navView.setupWithNavController(navController)
     }
 
@@ -48,14 +45,17 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         when (item.itemId) {
             android.R.id.home -> {
-                navController.navigate(R.id.action_navigation_game_init_to_navigation_home)
+                navController.navigate(R.id.navigation_home)
                 return true
             }
             R.id.toolbarButton -> {
+                val viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
+                viewmodel.gameStarted.value = true
+                navController.navigate(R.id.navigation_home)
                 return true
             }
         }
-        return super.onOptionsItemSelected(item)
+        return onOptionsItemSelected(item)
     }
 
 }

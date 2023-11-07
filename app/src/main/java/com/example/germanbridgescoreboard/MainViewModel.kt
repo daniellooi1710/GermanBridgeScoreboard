@@ -10,12 +10,17 @@ import com.example.germanbridgescoreboard.MainActivity
 import com.example.germanbridgescoreboard.R
 
 class MainViewModel : ViewModel() {
-    var gameStarted = false
+    var gameStarted = MutableLiveData<Boolean>(false)
     companion object {
-        lateinit var game: Game
+        var game = MutableLiveData<Game>()
     }
 
-    var playerNum = MutableLiveData<Int>(2)
+    var playerNum : MutableLiveData<Int> = init(gameStarted.value!!)
+
+    fun init(start: Boolean): MutableLiveData<Int>{
+        if(start) return playerNum
+        else return MutableLiveData<Int>(2)
+    }
 
     fun add(){
         playerNum.value = playerNum.value?.plus(1)
@@ -26,13 +31,11 @@ class MainViewModel : ViewModel() {
     }
 
     fun createGame(){
-        game = playerNum.value?.let { Game(it) }!!
-        gameStarted = true
+        game.value = playerNum.value?.let { Game(it) }!!
     }
 
     fun newGame(){
-        gameStarted = false
+        gameStarted.value = false
     }
-
 
 }

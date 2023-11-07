@@ -11,8 +11,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentGameInitBinding
 import com.example.germanbridgescoreboard.ui.home.MainViewModel
@@ -37,11 +40,12 @@ class InputPlayerFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
+                this.setItemViewCacheSize(12)
                 layoutManager = when {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = InputPlayerRecyclerViewAdapter(game)
+                adapter = InputPlayerRecyclerViewAdapter(game.value!!)
             }
         }
         return view
@@ -50,14 +54,5 @@ class InputPlayerFragment : Fragment() {
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar, menu)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id: Int = item.itemId
-        if(id == R.id.toolbarButton){
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 }
