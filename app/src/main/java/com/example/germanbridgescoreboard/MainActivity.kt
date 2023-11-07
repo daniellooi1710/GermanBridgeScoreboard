@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.NavDestination
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.germanbridgescoreboard.databinding.ActivityMainBinding
-import com.example.germanbridgescoreboard.ui.home.MainViewModel
+import com.example.germanbridgescoreboard.MainViewModel.Companion.game
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -50,8 +49,19 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.toolbarButton -> {
                 val viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
-                viewmodel.gameStarted.value = true
-                navController.navigate(R.id.navigation_home)
+                var isNull = false
+                for(i in 0..<(game.playerCount)){
+                    if(game.players[i].getName() == ""){
+                        Toast.makeText(this.applicationContext, "Player names cannot be null", Toast.LENGTH_LONG).show()
+                        isNull = true
+                        break
+                    }
+                }
+                if(!isNull){
+                    viewmodel.startGame()
+                    navController.navigate(R.id.navigation_home)
+                }
+
                 return true
             }
         }

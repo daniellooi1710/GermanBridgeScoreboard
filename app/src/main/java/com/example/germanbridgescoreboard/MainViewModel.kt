@@ -1,4 +1,4 @@
-package com.example.germanbridgescoreboard.ui.home
+package com.example.germanbridgescoreboard
 
 import android.widget.EditText
 import androidx.lifecycle.LiveData
@@ -11,16 +11,13 @@ import com.example.germanbridgescoreboard.R
 
 class MainViewModel : ViewModel() {
     var gameStarted = MutableLiveData<Boolean>(false)
-    companion object {
-        var game = MutableLiveData<Game>()
-    }
 
-    var playerNum : MutableLiveData<Int> = init(gameStarted.value!!)
+    companion object{
 
-    fun init(start: Boolean): MutableLiveData<Int>{
-        if(start) return playerNum
-        else return MutableLiveData<Int>(2)
     }
+    lateinit var game : Game
+
+    var playerNum : MutableLiveData<Int> = MutableLiveData<Int>(2)
 
     fun add(){
         playerNum.value = playerNum.value?.plus(1)
@@ -31,7 +28,12 @@ class MainViewModel : ViewModel() {
     }
 
     fun createGame(){
-        game.value = playerNum.value?.let { Game(it) }!!
+        val num: Int = playerNum.value!!
+        game = Game(num)
+    }
+
+    fun startGame(){
+        gameStarted.value = true
     }
 
     fun newGame(){

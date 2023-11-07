@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.germanbridgescoreboard.databinding.FragmentBidsOutcomesBinding
-import com.example.germanbridgescoreboard.ui.home.MainViewModel
+import com.example.germanbridgescoreboard.MainViewModel
 
 class BidsOutcomesFragment : Fragment() {
     private lateinit var viewmodel: MainViewModel

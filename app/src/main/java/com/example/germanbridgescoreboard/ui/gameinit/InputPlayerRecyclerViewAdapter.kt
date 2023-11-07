@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.germanbridgescoreboard.Game
 import com.example.germanbridgescoreboard.databinding.FragmentInputBinding
 
-class InputPlayerRecyclerViewAdapter(var game: Game) : RecyclerView.Adapter<InputPlayerRecyclerViewAdapter.ViewHolder>() {
+
+class InputPlayerRecyclerViewAdapter(gameDetail: Game) : RecyclerView.Adapter<InputPlayerRecyclerViewAdapter.ViewHolder>() {
+    val num = gameDetail.playerCount
+    var strArray = Array<String>(num){""}
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             FragmentInputBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,7 +24,9 @@ class InputPlayerRecyclerViewAdapter(var game: Game) : RecyclerView.Adapter<Inpu
         holder.bindName(position)
     }
 
-    override fun getItemCount(): Int = game.playerCount
+    override fun getItemCount(): Int {
+        return num
+    }
 
 
     inner class ViewHolder(binding: FragmentInputBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -34,7 +39,6 @@ class InputPlayerRecyclerViewAdapter(var game: Game) : RecyclerView.Adapter<Inpu
             myTextView.text = text
         }
 
-
         fun bindName(position: Int){
             myTextInputEditText.addTextChangedListener {object:  TextWatcher{
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -42,16 +46,18 @@ class InputPlayerRecyclerViewAdapter(var game: Game) : RecyclerView.Adapter<Inpu
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+                    strArray[position] = p0.toString()
                 }
 
                 override fun afterTextChanged(text: Editable?) {
-                    game.players[position].name = text.toString()
+
                 }
 
             }
             }
         }
     }
-
+    interface Callbacks {
+        fun handleUserData(data: Array<String>)
+    }
 }

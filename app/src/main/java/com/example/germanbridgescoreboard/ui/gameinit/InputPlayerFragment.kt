@@ -18,10 +18,10 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentGameInitBinding
-import com.example.germanbridgescoreboard.ui.home.MainViewModel
-import com.example.germanbridgescoreboard.ui.home.MainViewModel.Companion.game
+import com.example.germanbridgescoreboard.MainViewModel
 
-class InputPlayerFragment : Fragment() {
+
+class InputPlayerFragment : Fragment(), InputPlayerRecyclerViewAdapter.Callbacks {
     private lateinit var viewmodel: MainViewModel
     private var columnCount = 1
 
@@ -45,7 +45,7 @@ class InputPlayerFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = InputPlayerRecyclerViewAdapter(game.value!!)
+                adapter = InputPlayerRecyclerViewAdapter(viewmodel.game)
             }
         }
         return view
@@ -54,5 +54,11 @@ class InputPlayerFragment : Fragment() {
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar, menu)
+    }
+
+    override fun handleUserData(data: Array<String>) {
+        for(i in 0..<viewmodel.game.playerCount){
+            viewmodel.game.players[i].setName(data[i])
+        }
     }
 }
