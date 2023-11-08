@@ -12,7 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.germanbridgescoreboard.databinding.ActivityMainBinding
-import com.example.germanbridgescoreboard.MainViewModel.Companion.game
+import com.example.germanbridgescoreboard.ui.gameinit.InputPlayerRecyclerViewAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -42,16 +42,18 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle presses on the action bar menu items
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
+        val adapter = InputPlayerRecyclerViewAdapter(viewmodel.playerCount)
         when (item.itemId) {
             android.R.id.home -> {
                 navController.navigate(R.id.navigation_home)
                 return true
             }
             R.id.toolbarButton -> {
-                val viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
                 var isNull = false
-                for(i in 0..<(game.playerCount)){
-                    if(game.players[i].getName() == ""){
+                for(i in 0..<(viewmodel.playerCount)){
+                    viewmodel.players[i] = adapter.strArray[i]
+                    if(viewmodel.players[i] == ""){
                         Toast.makeText(this.applicationContext, "Player names cannot be null", Toast.LENGTH_LONG).show()
                         isNull = true
                         break

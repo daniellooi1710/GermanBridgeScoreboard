@@ -13,16 +13,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentGameInitBinding
 import com.example.germanbridgescoreboard.MainViewModel
+import com.example.germanbridgescoreboard.ui.home.HomeFragment
 
 
 class InputPlayerFragment : Fragment(), InputPlayerRecyclerViewAdapter.Callbacks {
-    private lateinit var viewmodel: MainViewModel
+    private val viewmodel: MainViewModel by activityViewModels()
     private var columnCount = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +37,6 @@ class InputPlayerFragment : Fragment(), InputPlayerRecyclerViewAdapter.Callbacks
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
         val view = inflater.inflate(R.layout.fragment_game_init, container, false)
 
         // Set the adapter
@@ -45,7 +47,7 @@ class InputPlayerFragment : Fragment(), InputPlayerRecyclerViewAdapter.Callbacks
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = InputPlayerRecyclerViewAdapter(viewmodel.game)
+                adapter = InputPlayerRecyclerViewAdapter(viewmodel.playerCount)
             }
         }
         return view
@@ -57,8 +59,8 @@ class InputPlayerFragment : Fragment(), InputPlayerRecyclerViewAdapter.Callbacks
     }
 
     override fun handleUserData(data: Array<String>) {
-        for(i in 0..<viewmodel.game.playerCount){
-            viewmodel.game.players[i].setName(data[i])
+        for(i in 0..<viewmodel.playerCount){
+            viewmodel.players[i] = data[i]
         }
     }
 }
