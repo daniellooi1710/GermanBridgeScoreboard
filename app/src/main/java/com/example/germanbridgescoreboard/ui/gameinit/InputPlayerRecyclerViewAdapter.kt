@@ -4,29 +4,31 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView
 import androidx.core.widget.addTextChangedListener
+
 import androidx.recyclerview.widget.RecyclerView
-import com.example.germanbridgescoreboard.Game
-import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentInputBinding
-import com.google.android.material.textfield.TextInputEditText
 
 
 class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputPlayerRecyclerViewAdapter.ViewHolder>() {
-    var strArray = Array<String>(num){""}
+    companion object{
+        var strArray : ArrayList<String> = ArrayList<String>()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
         return ViewHolder(
             FragmentInputBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        strArray.add("")
         holder.append(holder.bindingAdapterPosition)
-        holder.myTextInputEditText.tag = holder.bindingAdapterPosition
+        Log.d("debug bind", "${holder.bindingAdapterPosition}")
+        holder.bindName(holder.bindingAdapterPosition)
+        //holder.myTextInputEditText.tag = holder.bindingAdapterPosition
     }
 
     override fun getItemCount(): Int {
@@ -34,31 +36,26 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
     }
 
     inner class ViewHolder(binding: FragmentInputBinding) : RecyclerView.ViewHolder(binding.root) {
-        var myTextView : TextView
-        var myTextInputEditText : TextInputEditText
+        var myTextView = binding.playerNum
+        var myTextInputLayout = binding.inputPlayerNameField
+        var myTextInputEditText = binding.inputPlayerName
 
         init {
-            myTextView = binding.playerNum
-            myTextInputEditText = binding.inputPlayerName
-            super.itemView
-            myTextInputEditText.addTextChangedListener {
-                object : TextWatcher {
-                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    }
-                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        Log.d("debug",p0.toString())
-                        if (myTextInputEditText.tag != null) {
-                            strArray[bindingAdapterPosition] = p0.toString()
-                        }
-                    }
-                    override fun afterTextChanged(text: Editable?) {
-                        //Log.d("debug",text.toString())
-                        //if(myTextInputEditText.getTag() != null){
-                        //    strArray[myTextInputEditText.getTag().toString().toInt()] = myTextInputEditText.text.toString()
-                        //}
-                    }
+            /*super.itemView
+
+            binding.inputPlayerName.addTextChangedListener(
+                fun(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                },
+                fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    Log.d("debug",p0.toString())
+                    strArray[bindingAdapterPosition] = p0.toString()
+                },
+                fun (text: Editable?) {
+
                 }
-            }
+            )
+            Log.d("debug class", "$bindingAdapterPosition")*/
         }
 
         fun append(position: Int){
@@ -66,30 +63,29 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
             myTextView.text = text
         }
 
-        fun bindName(){
-            myTextInputEditText.addTextChangedListener {object:  TextWatcher{
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        fun bindName(position: Int){
+            myTextInputEditText.addTextChangedListener(
+                fun(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
+                },
+                fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    Log.d("debug",p0.toString())
+                    strArray[position] = p0.toString()
+                    Log.d("debug array", strArray[position])
+                },
+                fun (text: Editable?) {
+                    strArray[position] = text.toString()
+                    Log.d("debug after", strArray[position])
                 }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if(myTextInputEditText.tag != null){
-                        strArray[myTextInputEditText.tag.toString().toInt()] = myTextInputEditText.text.toString()
-                    }
-                }
-
-                override fun afterTextChanged(text: Editable?) {
-                    //Log.d("debug",text.toString())
-                    //if(myTextInputEditText.getTag() != null){
-                    //    strArray[myTextInputEditText.getTag().toString().toInt()] = myTextInputEditText.text.toString()
-                    //}
-                }
-
-            }
-            }
+            )
+            Log.d("debug class", "$position")
         }
     }
     interface Callbacks {
         fun handleUserData(data: Array<String>)
+    }
+
+    fun obtainName(): ArrayList<String>{
+        return strArray
     }
 }

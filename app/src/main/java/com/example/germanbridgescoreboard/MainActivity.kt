@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             R.id.toolbarButton -> {
                 var isNull = false
                 for(i in 0..<(viewmodel.playerCount)){
-                    viewmodel.players[i] = adapter.strArray[i]
+                    viewmodel.players[i] = adapter.obtainName()[i]
                     if(viewmodel.players[i] == ""){
                         Toast.makeText(this.applicationContext, "Player names cannot be null", Toast.LENGTH_LONG).show()
                         isNull = true
