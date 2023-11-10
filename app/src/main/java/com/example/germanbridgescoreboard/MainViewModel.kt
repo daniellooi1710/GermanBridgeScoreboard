@@ -25,7 +25,6 @@ class MainViewModel : ViewModel() {
     lateinit var win : Array<Int>
     lateinit var score : Array<Int>
     lateinit var total: Array<Int>
-    private var winStreak: Int = 0
 
     lateinit var players : Array<String>
     lateinit var playerBids : Array<Array<Int>>
@@ -50,6 +49,7 @@ class MainViewModel : ViewModel() {
 
     fun startGame(){
         gameStarted.value = true
+        playerCount = 0
     }
 
     fun newGame(){

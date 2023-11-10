@@ -1,10 +1,13 @@
 package com.example.germanbridgescoreboard.ui.bidoutcome
 
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.germanbridgescoreboard.databinding.FragmentBidWinBinding
 import com.example.germanbridgescoreboard.databinding.FragmentInputBinding
+import com.example.germanbridgescoreboard.ui.gameinit.InputPlayerRecyclerViewAdapter
 
 class BidsOutcomesRecyclerViewAdapter(val numPlayers: Int, val names: Array<String>): RecyclerView.Adapter<BidsOutcomesRecyclerViewAdapter.ViewHolder>() {
 
@@ -17,6 +20,29 @@ class BidsOutcomesRecyclerViewAdapter(val numPlayers: Int, val names: Array<Stri
         var tv = binding.playerName
         var inBid = binding.inputBid
         var inWin = binding.inputWin
+
+        fun bind(pos : Int){
+            inBid.addTextChangedListener(
+                fun(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                },
+                fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    bids[pos] = p0.toString().toInt()
+                },
+                fun (text: Editable?) {
+                }
+            )
+            inWin.addTextChangedListener(
+                fun(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                },
+                fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    wins[pos] = p0.toString().toInt()
+                },
+                fun (text: Editable?) {
+                }
+            )
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,6 +52,7 @@ class BidsOutcomesRecyclerViewAdapter(val numPlayers: Int, val names: Array<Stri
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         bids.add(0)
         wins.add(0)
+        holder.bind(position)
     }
 
     override fun getItemCount(): Int {
