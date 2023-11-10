@@ -15,7 +15,7 @@ import com.example.germanbridgescoreboard.MainViewModel
 import com.example.germanbridgescoreboard.R
 
 
-class InputPlayerFragment : Fragment(), InputPlayerRecyclerViewAdapter.Callbacks {
+class InputPlayerFragment : Fragment(){
     private val viewmodel: MainViewModel by activityViewModels()
     private var columnCount = 1
 
@@ -47,11 +47,5 @@ class InputPlayerFragment : Fragment(), InputPlayerRecyclerViewAdapter.Callbacks
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar, menu)
-    }
-
-    override fun handleUserData(data: Array<String>) {
-        for(i in 0..<viewmodel.playerCount){
-            viewmodel.players[i] = data[i]
-        }
     }
 }

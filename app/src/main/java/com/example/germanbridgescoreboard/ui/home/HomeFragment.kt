@@ -38,10 +38,18 @@ class HomeFragment : Fragment() {
             if(viewmodel.gameStarted.value!!){
                 binding.textView.setBackgroundColor(Color.GREEN)
                 binding.textView.setText(R.string.game_ongoing)
+                binding.buttonMinus.isEnabled = false
+                binding.buttonPlus.isEnabled = false
+                binding.buttonStart.isEnabled = false
+                binding.buttonNew.isEnabled = true
             }
             else{
                 binding.textView.setBackgroundColor(Color.YELLOW)
                 binding.textView.setText(R.string.init_game)
+                binding.buttonStart.isEnabled = true
+                binding.buttonNew.isEnabled = false
+                binding.buttonMinus.isEnabled = true
+                binding.buttonPlus.isEnabled = true
             }
         })
 
@@ -50,23 +58,27 @@ class HomeFragment : Fragment() {
             playerNumDisplay.setText(it.toString())
         })
 
-        binding.button2.setOnClickListener{
+        binding.buttonMinus.setOnClickListener{
             if (playerNumDisplay.text.toString().toInt() > 2) viewmodel.minus()
             else{
                 Toast.makeText(root.context, "Minimum number of players is 2", Toast.LENGTH_LONG).show()
             }
         }
 
-        binding.button3.setOnClickListener{
+        binding.buttonPlus.setOnClickListener{
             if (playerNumDisplay.text.toString().toInt() < 12) viewmodel.add()
             else{
                 Toast.makeText(root.context, "Maximum number of players is 12", Toast.LENGTH_LONG).show()
             }
         }
 
-        binding.button4.setOnClickListener {
+        binding.buttonStart.setOnClickListener {
             viewmodel.initGame()
             it.findNavController().navigate(R.id.navigation_game_init)
+        }
+
+        binding.buttonNew.setOnClickListener {
+            viewmodel.newGame()
         }
         return root
     }

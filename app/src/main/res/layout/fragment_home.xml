@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonMinus"
         style="@style/Widget.Material3.Button"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/buttonPlus"
         style="@style/Widget.Material3.Button"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -96,13 +96,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="Start Game"
+        android:enabled="true"
+        android:text="@string/start_game"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumber"
@@ -110,17 +109,15 @@
     />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/buttonNew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:clickable="false"
         android:enabled="false"
-        android:focusable="auto"
-        android:text="New Game"
+        android:text="@string/new_game"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonStart" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

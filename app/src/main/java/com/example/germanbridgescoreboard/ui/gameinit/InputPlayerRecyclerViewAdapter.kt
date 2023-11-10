@@ -28,7 +28,6 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
         holder.append(holder.bindingAdapterPosition)
         Log.d("debug bind", "${holder.bindingAdapterPosition}")
         holder.bindName(holder.bindingAdapterPosition)
-        //holder.myTextInputEditText.tag = holder.bindingAdapterPosition
     }
 
     override fun getItemCount(): Int {
@@ -42,8 +41,7 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
 
         init {
             /*super.itemView
-
-            binding.inputPlayerName.addTextChangedListener(
+            myTextInputEditText.addTextChangedListener(
                 fun(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
                 },
@@ -69,16 +67,11 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
 
                 },
                 fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    Log.d("debug",p0.toString())
                     strArray[position] = p0.toString()
-                    Log.d("debug array", strArray[position])
                 },
                 fun (text: Editable?) {
-                    strArray[position] = text.toString()
-                    Log.d("debug after", strArray[position])
                 }
             )
-            Log.d("debug class", "$position")
         }
     }
     interface Callbacks {
