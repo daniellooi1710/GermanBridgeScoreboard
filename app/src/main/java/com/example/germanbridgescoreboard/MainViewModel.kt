@@ -49,11 +49,11 @@ class MainViewModel : ViewModel() {
 
     fun startGame(){
         gameStarted.value = true
-        playerCount = 0
     }
 
     fun newGame(){
         gameStarted.value = false
+        playerCount = 0
     }
 
     fun checkBids(): Boolean{

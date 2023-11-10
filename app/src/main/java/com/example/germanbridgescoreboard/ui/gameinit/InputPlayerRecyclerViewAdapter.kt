@@ -62,19 +62,16 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
 
         fun bindName(position: Int){
             myTextInputEditText.addTextChangedListener(
-                fun(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                fun(_: CharSequence?, _: Int, _: Int, _: Int) {
 
                 },
                 fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     strArray[position] = p0.toString()
                 },
-                fun (text: Editable?) {
+                fun (_: Editable?) {
                 }
             )
         }
-    }
-    interface Callbacks {
-        fun handleUserData(data: Array<String>)
     }
 
     fun obtainName(): ArrayList<String>{

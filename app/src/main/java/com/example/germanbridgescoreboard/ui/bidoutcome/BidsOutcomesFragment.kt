@@ -27,14 +27,17 @@ class BidsOutcomesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_bids_outcomes, container, false)
-
+        Log.d("debug", "good")
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
+        val view2 = view.findViewById<RecyclerView>(R.id.bid_win_table)
+        if (view2 is RecyclerView) {
+            with(view2) {
                 this.setItemViewCacheSize(12)
                 layoutManager = LinearLayoutManager(context)
-                val nameArray = viewmodel.players
-                adapter = BidsOutcomesRecyclerViewAdapter(viewmodel.playerCount, nameArray)
+                if(viewmodel.playerCount > 0) {
+                    val nameArray = viewmodel.players
+                    adapter = BidsOutcomesRecyclerViewAdapter(viewmodel.playerCount, nameArray)
+                }
             }
         }
         return view

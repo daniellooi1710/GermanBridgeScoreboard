@@ -23,23 +23,23 @@ class BidsOutcomesRecyclerViewAdapter(val numPlayers: Int, val names: Array<Stri
 
         fun bind(pos : Int){
             inBid.addTextChangedListener(
-                fun(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                fun(_: CharSequence?, _: Int, _: Int, _: Int) {
 
                 },
                 fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     bids[pos] = p0.toString().toInt()
                 },
-                fun (text: Editable?) {
+                fun (_: Editable?) {
                 }
             )
             inWin.addTextChangedListener(
-                fun(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                fun(_: CharSequence?, _: Int, _: Int, _: Int) {
 
                 },
                 fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     wins[pos] = p0.toString().toInt()
                 },
-                fun (text: Editable?) {
+                fun (_: Editable?) {
                 }
             )
         }
@@ -50,6 +50,7 @@ class BidsOutcomesRecyclerViewAdapter(val numPlayers: Int, val names: Array<Stri
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.tv.text = names[position]
         bids.add(0)
         wins.add(0)
         holder.bind(position)
