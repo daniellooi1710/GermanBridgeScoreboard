@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -78,7 +79,18 @@ class HomeFragment : Fragment() {
         }
 
         binding.buttonNew.setOnClickListener {
-            viewmodel.newGame()
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            builder
+                .setMessage("End current game and start a new game?")
+                .setTitle("New Game")
+                .setPositiveButton("Yes") { dialog, which ->
+                    viewmodel.newGame()
+                }
+                .setNegativeButton("No") { dialog, which ->
+                }
+
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
         }
         return root
     }

@@ -16,4 +16,6 @@
     <string name="next">Next</string>
     <string name="bidding">Bidding</string>
     <string name="round">"Round "</string>
+    <string name="wins">Wins</string>
+    <string name="bids">Bids</string>
 </resources>

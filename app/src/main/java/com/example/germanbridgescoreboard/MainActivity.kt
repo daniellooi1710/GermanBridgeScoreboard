@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 if(!isNull){
+                    adapter.resetArray()
                     viewmodel.startGame()
                     navController.navigate(R.id.navigation_home)
                 }

@@ -26,7 +26,6 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         strArray.add("")
         holder.append(holder.bindingAdapterPosition)
-        Log.d("debug bind", "${holder.bindingAdapterPosition}")
         holder.bindName(holder.bindingAdapterPosition)
     }
 
@@ -80,5 +79,9 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
 
     fun obtainName(): ArrayList<String>{
         return strArray
+    }
+
+    fun resetArray(){
+        strArray.clear()
     }
 }
