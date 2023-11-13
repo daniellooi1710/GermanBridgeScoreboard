@@ -1,12 +1,9 @@
 package com.example.germanbridgescoreboard.ui.gameinit
 
 import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-
 import androidx.recyclerview.widget.RecyclerView
 import com.example.germanbridgescoreboard.databinding.FragmentInputBinding
 
@@ -38,23 +35,6 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
         var myTextInputLayout = binding.inputPlayerNameField
         var myTextInputEditText = binding.inputPlayerName
 
-        init {
-            /*super.itemView
-            myTextInputEditText.addTextChangedListener(
-                fun(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                },
-                fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    Log.d("debug",p0.toString())
-                    strArray[bindingAdapterPosition] = p0.toString()
-                },
-                fun (text: Editable?) {
-
-                }
-            )
-            Log.d("debug class", "$bindingAdapterPosition")*/
-        }
-
         fun append(position: Int){
             val text = "${myTextView.text} ${position + 1}"
             myTextView.text = text
@@ -63,12 +43,13 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
         fun bindName(position: Int){
             myTextInputEditText.addTextChangedListener(
                 fun(_: CharSequence?, _: Int, _: Int, _: Int) {
-
+                    // Implementation was unnecessary
                 },
                 fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     strArray[position] = p0.toString()
                 },
                 fun (_: Editable?) {
+                    // Implementation was unnecessary
                 }
             )
         }

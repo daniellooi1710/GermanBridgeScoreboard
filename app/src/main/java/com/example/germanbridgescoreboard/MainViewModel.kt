@@ -16,7 +16,7 @@ class MainViewModel : ViewModel() {
 
     var playerCount: Int = 0
     var rounds: Int = 0
-    var currentRound: Int = 0
+    var currentRound = MutableLiveData<Int>(0)
 
     var playerNum : MutableLiveData<Int> = if(playerCount == 0) MutableLiveData<Int>(2) else MutableLiveData<Int>(playerCount)
 
@@ -49,29 +49,36 @@ class MainViewModel : ViewModel() {
 
     fun startGame(){
         gameStarted.value = true
+        currentRound.value = 1
     }
 
     fun newGame(){
         gameStarted.value = false
         playerCount = 0
+        currentRound.value = 0
+    }
+
+    fun endGame(){
+        gameStarted.value = false
     }
 
     fun checkBids(): Boolean{
         var bids : Int = 0
         for(i in 0..<playerCount){
-            bids += playerBids[i][currentRound - 1]
+            bids += playerBids[i][currentRound.value!! - 1]
         }
-        if (bids == currentRound) return false
+        if (bids == currentRound.value) return false
         return true
     }
 
     fun calcScores(){
+        val currentRoundIndex = currentRound.value!! - 1
         for(i in 0..<playerCount){
-            if(playerBids[i][currentRound - 1] == playerWins[i][currentRound - 1]){
-                playerScores[i][currentRound - 1] = 10 + playerBids[i][currentRound - 1].toFloat().pow(2).toInt()
+            if(playerBids[i][currentRoundIndex] == playerWins[i][currentRoundIndex]){
+                playerScores[i][currentRoundIndex] = 10 + playerBids[i][currentRoundIndex].toFloat().pow(2).toInt()
             }
             else{
-                playerScores[i][currentRound - 1] = (playerWins[i][currentRound - 1] - playerBids[i][currentRound - 1]).absoluteValue
+                playerScores[i][currentRoundIndex] = (playerWins[i][currentRoundIndex] - playerBids[i][currentRoundIndex]).absoluteValue
             }
         }
     }
@@ -83,10 +90,5 @@ class MainViewModel : ViewModel() {
     fun minus(){
         playerNum.value = playerNum.value?.minus(1)
     }
-
-    /*fun createGame(){
-        val num: Int = playerNum.value!!
-        game = Game(num)
-    }*/
 
 }

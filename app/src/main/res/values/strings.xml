@@ -15,7 +15,10 @@
     <string name="new_game">New Game</string>
     <string name="next">Next</string>
     <string name="bidding">Bidding</string>
+    <string name="playing">Playing</string>
     <string name="round">"Round "</string>
     <string name="wins">Wins</string>
     <string name="bids">Bids</string>
+    <string name="game_not_started">Game not started</string>
+    <string name="test">test</string>
 </resources>
