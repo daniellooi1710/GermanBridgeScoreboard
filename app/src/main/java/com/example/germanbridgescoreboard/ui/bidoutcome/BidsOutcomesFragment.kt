@@ -46,6 +46,7 @@ class BidsOutcomesFragment : Fragment() {
             if(view2 is RecyclerView){
                 with(view2) {
                     this.setItemViewCacheSize(12)
+                    this.isNestedScrollingEnabled = false
                     layoutManager = LinearLayoutManager(context)
                     this.adapter = BidsOutcomesRecyclerViewAdapter(viewmodel.playerCount, nameArray)
                     adapter = this.adapter as BidsOutcomesRecyclerViewAdapter
@@ -97,11 +98,6 @@ class BidsOutcomesFragment : Fragment() {
                         rv.findViewWithTag<TextInputEditText>("b$i").isEnabled = false
                         rv.findViewWithTag<TextInputEditText>("w$i").isEnabled = true
                     }
-                    else{
-                        lm.findViewByPosition(i)?.findViewWithTag<TextInputEditText>("b$i")?.isEnabled = false
-                        lm.findViewByPosition(i)?.findViewWithTag<TextInputEditText>("w$i")?.isEnabled = true
-                    }
-
                 }
             }
         }
@@ -139,9 +135,10 @@ class BidsOutcomesFragment : Fragment() {
                 binding.buttonDone.visibility = View.GONE
                 binding.buttonNext.visibility = View.VISIBLE
                 adapter.resetArrays()
+                val rv = root.findViewById<RecyclerView>(R.id.bid_win_table)
                 for(i in 0 until viewmodel.playerCount){
-                    root.findViewById<RecyclerView>(R.id.bid_win_table).findViewWithTag<TextInputEditText>("b$i").isEnabled = true
-                    root.findViewById<RecyclerView>(R.id.bid_win_table).findViewWithTag<TextInputEditText>("w$i").isEnabled = false
+                    rv.findViewWithTag<TextInputEditText>("b$i").isEnabled = true
+                    rv.findViewWithTag<TextInputEditText>("w$i").isEnabled = false
                 }
 
                 if(viewmodel.currentRound.value == viewmodel.rounds){

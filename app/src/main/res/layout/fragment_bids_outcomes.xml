@@ -131,28 +131,21 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bid_win_table"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        tools:context=".ui.bidoutcome.BidsOutcomesFragment"
-        tools:listitem="@layout/fragment_bid_win" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-    <ListView
-        android:id="@+id/bid_win_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        tools:context=".ui.bidoutcome.BidsOutcomesFragment"
-        tools:listitem="@layout/fragment_bid_win" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bid_win_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".ui.bidoutcome.BidsOutcomesFragment"
+            tools:listitem="@layout/fragment_bid_win" />
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
