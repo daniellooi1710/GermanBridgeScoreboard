@@ -13,39 +13,40 @@ class MainViewModel : ViewModel() {
         PLAYING
     }
 
-    var gameStarted = MutableLiveData<Boolean>(false)
-    var gameProcess = MutableLiveData<GAMEPROCESS>(GAMEPROCESS.BIDDING)
+    var gameStarted = MutableLiveData(false)
+    var gameProcess = MutableLiveData(GAMEPROCESS.BIDDING)
 
     var playerCount: Int = 0
     var rounds: Int = 0
-    var currentRound = MutableLiveData<Int>(0)
+    var currentRound = MutableLiveData(0)
 
     var playerNum : MutableLiveData<Int> = if(playerCount == 0) MutableLiveData<Int>(2) else MutableLiveData<Int>(playerCount)
 
     var name: String = ""
-    lateinit var bid : Array<Int>
+    /*lateinit var bid : Array<Int>
     lateinit var win : Array<Int>
-    lateinit var score : Array<Int>
+    lateinit var score : Array<Int>*/
     lateinit var total: Array<Int>
 
     lateinit var players : Array<String>
     lateinit var playerBids : Array<Array<Int>>
     lateinit var playerWins : Array<Array<Int>>
     lateinit var playerScores : Array<Array<Int>>
-    lateinit var playerTotals : Array<Array<Int>>
+    lateinit var playerScoresT : Array<Array<Int>>
 
     fun initGame(){
         playerCount = playerNum.value!!
         rounds = if(52 % playerCount != 0) floor(52.0/playerCount).toInt() else (52/playerCount - 1)
         players = Array(playerCount){name}
-        bid = Array(rounds){0}
+        /*bid = Array(rounds){0}
         win = Array(rounds){0}
-        score = Array(rounds){0}
+        score = Array(rounds){0}*/
         total = Array(playerCount){0}
 
         playerBids = Array(playerCount){Array(rounds){0}}
         playerWins = Array(playerCount){Array(rounds){0}}
         playerScores = Array(playerCount){Array(rounds){0}}
+        playerScoresT = Array(rounds){Array(playerCount){0}}
     }
 
     fun startGame(){
@@ -67,16 +68,19 @@ class MainViewModel : ViewModel() {
     fun calcScores(){
         val currentRoundIndex = currentRound.value!! - 1
         for(i in 0 until playerCount){
-            Log.d("player", players[i])
-            Log.d("player", playerBids[i][currentRoundIndex].toString())
-            Log.d("player", playerWins[i][currentRoundIndex].toString())
-            if(playerBids[i][currentRoundIndex] == playerWins[i][currentRoundIndex]){
+            /*if(playerBids[i][currentRoundIndex] == playerWins[i][currentRoundIndex]){
                 playerScores[i][currentRoundIndex] = 10 + playerBids[i][currentRoundIndex].toFloat().pow(2).toInt()
             }
             else{
                 playerScores[i][currentRoundIndex] = -((playerWins[i][currentRoundIndex] - playerBids[i][currentRoundIndex]).absoluteValue)
+            }*/
+            if(playerBids[i][currentRoundIndex] == playerWins[i][currentRoundIndex]){
+                playerScoresT[currentRoundIndex][i] = 10 + playerBids[i][currentRoundIndex].toFloat().pow(2).toInt()
             }
-            total[i] = playerScores[i].sum()
+            else{
+                playerScoresT[currentRoundIndex][i] = -((playerWins[i][currentRoundIndex] - playerBids[i][currentRoundIndex]).absoluteValue)
+            }
+            total[i] += playerScoresT[currentRoundIndex][i]
         }
     }
 

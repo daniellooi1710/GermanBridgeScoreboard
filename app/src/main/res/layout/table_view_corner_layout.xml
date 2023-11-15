@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Player/Round"
+        android:textAlignment="center"
         android:textColor="@color/table_view_default_text_color"
         android:textSize="@dimen/text_size"
         android:textStyle="bold" />

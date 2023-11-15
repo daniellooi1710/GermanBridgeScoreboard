@@ -102,9 +102,6 @@ class BidsOutcomesFragment : Fragment() {
                 for(i in 0 until viewmodel.playerCount){
                     viewmodel.playerBids[i][viewmodel.currentRound.value!! - 1] = array[i]
                 }
-                for(i in 0 until viewmodel.playerCount){
-                    Log.d("debug", viewmodel.playerBids[i][viewmodel.currentRound.value!! - 1].toString())
-                }
                 viewmodel.playing()
 
                 val lm = view2.layoutManager as LinearLayoutManager

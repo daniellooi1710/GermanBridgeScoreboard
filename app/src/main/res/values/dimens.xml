@@ -4,10 +4,10 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="cell_height">40dp</dimen>
-    <dimen name="cell_width">30dp</dimen>
-    <dimen name="text_size">12sp</dimen>
+    <dimen name="cell_width">108dp</dimen>
+    <dimen name="text_size">16sp</dimen>
 
     <!-- Overriding the default values of the tableView -->
-    <dimen name="default_row_header_width">108dp</dimen>
+    <dimen name="default_row_header_width">90dp</dimen>
     <dimen name="default_column_header_height">48dp</dimen>
 </resources>

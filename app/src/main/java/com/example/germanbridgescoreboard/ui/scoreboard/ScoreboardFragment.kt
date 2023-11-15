@@ -42,13 +42,20 @@ class ScoreboardFragment : Fragment() {
                 rh2[i] = rh[i]
             }
             val cells = viewmodel.playerScores
+            val cellsT = viewmodel.playerScoresT
             val cells2 = MutableList(viewmodel.players.size){MutableList(viewmodel.rounds){0} }
+            val cells2T = MutableList(viewmodel.rounds){MutableList(viewmodel.players.size){0} }
             for (players in 0 until cells2.size){
                 for (rounds in 0 until cells2[players].size){
                     cells2[players][rounds] = cells[players][rounds]
                 }
             }
-            adapter.setAllItems(ch2, rh2, cells2)
+            for (rounds in 0 until cells2T.size){
+                for (players in 0 until cells2T[rounds].size){
+                    cells2T[rounds][players] = cellsT[rounds][players]
+                }
+            }
+            adapter.setAllItems(rh2, ch2, cells2T) // swapped row and column
         }
 
         return root
