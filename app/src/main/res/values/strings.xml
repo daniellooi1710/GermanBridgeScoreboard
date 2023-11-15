@@ -21,4 +21,5 @@
     <string name="bids">Bids</string>
     <string name="game_not_started">Game not started</string>
     <string name="test">test</string>
+    <string name="rule_violation">Rule Violation</string>
 </resources>

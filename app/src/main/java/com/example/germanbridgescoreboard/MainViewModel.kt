@@ -1,5 +1,6 @@
 package com.example.germanbridgescoreboard
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlin.math.absoluteValue
@@ -7,12 +8,13 @@ import kotlin.math.floor
 import kotlin.math.pow
 
 class MainViewModel : ViewModel() {
-    /*companion object{
-
+    enum class GAMEPROCESS{
+        BIDDING,
+        PLAYING
     }
-    lateinit var game : Game*/
 
     var gameStarted = MutableLiveData<Boolean>(false)
+    var gameProcess = MutableLiveData<GAMEPROCESS>(GAMEPROCESS.BIDDING)
 
     var playerCount: Int = 0
     var rounds: Int = 0
@@ -36,19 +38,19 @@ class MainViewModel : ViewModel() {
         playerCount = playerNum.value!!
         rounds = if(52 % playerCount != 0) floor(52.0/playerCount).toInt() else (52/playerCount - 1)
         players = Array(playerCount){name}
-        bid = Array(playerCount){0}
-        win = Array(playerCount){0}
-        score = Array(playerCount){0}
+        bid = Array(rounds){0}
+        win = Array(rounds){0}
+        score = Array(rounds){0}
         total = Array(playerCount){0}
 
-        playerBids = Array(playerCount){bid}
-        playerWins = Array(playerCount){win}
-        playerScores = Array(playerCount){score}
-        playerTotals = Array(playerCount){total}
+        playerBids = Array(playerCount){Array(rounds){0}}
+        playerWins = Array(playerCount){Array(rounds){0}}
+        playerScores = Array(playerCount){Array(rounds){0}}
     }
 
     fun startGame(){
         gameStarted.value = true
+        gameProcess.value = GAMEPROCESS.BIDDING
         currentRound.value = 1
     }
 
@@ -62,24 +64,19 @@ class MainViewModel : ViewModel() {
         gameStarted.value = false
     }
 
-    fun checkBids(): Boolean{
-        var bids : Int = 0
-        for(i in 0..<playerCount){
-            bids += playerBids[i][currentRound.value!! - 1]
-        }
-        if (bids == currentRound.value) return false
-        return true
-    }
-
     fun calcScores(){
         val currentRoundIndex = currentRound.value!! - 1
-        for(i in 0..<playerCount){
+        for(i in 0 until playerCount){
+            Log.d("player", players[i])
+            Log.d("player", playerBids[i][currentRoundIndex].toString())
+            Log.d("player", playerWins[i][currentRoundIndex].toString())
             if(playerBids[i][currentRoundIndex] == playerWins[i][currentRoundIndex]){
                 playerScores[i][currentRoundIndex] = 10 + playerBids[i][currentRoundIndex].toFloat().pow(2).toInt()
             }
             else{
-                playerScores[i][currentRoundIndex] = (playerWins[i][currentRoundIndex] - playerBids[i][currentRoundIndex]).absoluteValue
+                playerScores[i][currentRoundIndex] = -((playerWins[i][currentRoundIndex] - playerBids[i][currentRoundIndex]).absoluteValue)
             }
+            total[i] = playerScores[i].sum()
         }
     }
 
@@ -89,6 +86,18 @@ class MainViewModel : ViewModel() {
 
     fun minus(){
         playerNum.value = playerNum.value?.minus(1)
+    }
+
+    fun nextRound(){
+        currentRound.value = currentRound.value?.plus(1)
+    }
+
+    fun bidding(){
+        gameProcess.value = GAMEPROCESS.BIDDING
+    }
+
+    fun playing(){
+        gameProcess.value = GAMEPROCESS.PLAYING
     }
 
 }
