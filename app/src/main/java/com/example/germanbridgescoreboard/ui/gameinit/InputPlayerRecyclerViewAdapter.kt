@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.germanbridgescoreboard.databinding.FragmentInputBinding
 
 
-class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputPlayerRecyclerViewAdapter.ViewHolder>() {
+class InputPlayerRecyclerViewAdapter(private val num: Int) : RecyclerView.Adapter<InputPlayerRecyclerViewAdapter.ViewHolder>() {
     companion object{
-        var strArray : ArrayList<String> = ArrayList<String>()
+        var strArray : ArrayList<String> = ArrayList()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,7 +45,7 @@ class InputPlayerRecyclerViewAdapter(val num: Int) : RecyclerView.Adapter<InputP
                 fun(_: CharSequence?, _: Int, _: Int, _: Int) {
                     // Implementation was unnecessary
                 },
-                fun (p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                fun (p0: CharSequence?, _: Int, _: Int, _: Int) {
                     strArray[position] = p0.toString()
                 },
                 fun (_: Editable?) {

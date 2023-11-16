@@ -1,6 +1,5 @@
 package com.example.germanbridgescoreboard
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlin.math.absoluteValue
@@ -23,9 +22,6 @@ class MainViewModel : ViewModel() {
     var playerNum : MutableLiveData<Int> = if(playerCount == 0) MutableLiveData<Int>(2) else MutableLiveData<Int>(playerCount)
 
     var name: String = ""
-    /*lateinit var bid : Array<Int>
-    lateinit var win : Array<Int>
-    lateinit var score : Array<Int>*/
     lateinit var total: Array<Int>
 
     lateinit var players : Array<String>
@@ -38,9 +34,6 @@ class MainViewModel : ViewModel() {
         playerCount = playerNum.value!!
         rounds = if(52 % playerCount != 0) floor(52.0/playerCount).toInt() else (52/playerCount - 1)
         players = Array(playerCount){name}
-        /*bid = Array(rounds){0}
-        win = Array(rounds){0}
-        score = Array(rounds){0}*/
         total = Array(playerCount){0}
 
         playerBids = Array(playerCount){Array(rounds){0}}
@@ -68,12 +61,6 @@ class MainViewModel : ViewModel() {
     fun calcScores(){
         val currentRoundIndex = currentRound.value!! - 1
         for(i in 0 until playerCount){
-            /*if(playerBids[i][currentRoundIndex] == playerWins[i][currentRoundIndex]){
-                playerScores[i][currentRoundIndex] = 10 + playerBids[i][currentRoundIndex].toFloat().pow(2).toInt()
-            }
-            else{
-                playerScores[i][currentRoundIndex] = -((playerWins[i][currentRoundIndex] - playerBids[i][currentRoundIndex]).absoluteValue)
-            }*/
             if(playerBids[i][currentRoundIndex] == playerWins[i][currentRoundIndex]){
                 playerScoresT[currentRoundIndex][i] = 10 + playerBids[i][currentRoundIndex].toFloat().pow(2).toInt()
             }

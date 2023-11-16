@@ -10,11 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
-import com.example.germanbridgescoreboard.Game
 import com.example.germanbridgescoreboard.MainViewModel
 import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentHomeBinding
@@ -35,16 +31,15 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        viewmodel.gameStarted.observe(viewLifecycleOwner, Observer{
-            if(viewmodel.gameStarted.value!!){
+        viewmodel.gameStarted.observe(viewLifecycleOwner) {
+            if (viewmodel.gameStarted.value!!) {
                 binding.textView.setBackgroundColor(Color.GREEN)
                 binding.textView.setText(R.string.game_ongoing)
                 binding.buttonMinus.isEnabled = false
                 binding.buttonPlus.isEnabled = false
                 binding.buttonStart.isEnabled = false
                 binding.buttonNew.isEnabled = true
-            }
-            else{
+            } else {
                 binding.textView.setBackgroundColor(Color.YELLOW)
                 binding.textView.setText(R.string.init_game)
                 binding.buttonStart.isEnabled = true
@@ -52,12 +47,12 @@ class HomeFragment : Fragment() {
                 binding.buttonMinus.isEnabled = true
                 binding.buttonPlus.isEnabled = true
             }
-        })
+        }
 
         val playerNumDisplay: EditText = binding.editTextNumber
-        viewmodel.playerNum.observe(viewLifecycleOwner, Observer {
+        viewmodel.playerNum.observe(viewLifecycleOwner) {
             playerNumDisplay.setText(it.toString())
-        })
+        }
 
         binding.buttonMinus.setOnClickListener{
             if (playerNumDisplay.text.toString().toInt() > 2) viewmodel.minus()
@@ -83,10 +78,10 @@ class HomeFragment : Fragment() {
             builder
                 .setMessage("End current game and start a new game?")
                 .setTitle("New Game")
-                .setPositiveButton("Yes") { dialog, which ->
+                .setPositiveButton("Yes") { _, _ ->
                     viewmodel.newGame()
                 }
-                .setNegativeButton("No") { dialog, which ->
+                .setNegativeButton("No") { _, _ ->
                 }
 
             val dialog: AlertDialog = builder.create()

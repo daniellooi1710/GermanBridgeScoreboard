@@ -7,7 +7,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.germanbridgescoreboard.databinding.FragmentBidWinBinding
 
-class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val names: Array<String>): RecyclerView.Adapter<BidsOutcomesRecyclerViewAdapter.ViewHolder>() {
+class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val names: Array<String>, private val tempBidArr: ArrayList<Int>, private val tempWinArr: ArrayList<Int>): RecyclerView.Adapter<BidsOutcomesRecyclerViewAdapter.ViewHolder>() {
 
     companion object{
         var bids = ArrayList<Int>()
@@ -16,8 +16,8 @@ class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val n
 
     inner class ViewHolder(binding: FragmentBidWinBinding) : RecyclerView.ViewHolder(binding.root) {
         var tv = binding.playerName
-        private var inBid = binding.inputBid
-        private var inWin = binding.inputWin
+        var inBid = binding.inputBid
+        var inWin = binding.inputWin
 
         fun bind(pos : Int){
             inBid.tag = "b${pos}"
@@ -59,8 +59,14 @@ class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val n
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tv.text = names[position]
-        bids.add(0)
-        wins.add(0)
+        bids.add(-1)
+        wins.add(-1)
+        if(tempBidArr.isNotEmpty() && (tempBidArr[position] != -1)){
+            holder.inBid.setText(tempBidArr[position].toString())
+        }
+        if(tempWinArr.isNotEmpty() && (tempWinArr[position] != -1)){
+            holder.inWin.setText(tempWinArr[position].toString())
+        }
         holder.bind(position)
     }
 
