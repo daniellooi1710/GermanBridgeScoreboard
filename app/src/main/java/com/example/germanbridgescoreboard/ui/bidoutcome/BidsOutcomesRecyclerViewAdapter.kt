@@ -2,12 +2,15 @@ package com.example.germanbridgescoreboard.ui.bidoutcome
 
 import android.text.Editable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
+import com.example.germanbridgescoreboard.MainViewModel
+import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentBidWinBinding
 
-class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val names: Array<String>, private val tempBidArr: ArrayList<Int>, private val tempWinArr: ArrayList<Int>): RecyclerView.Adapter<BidsOutcomesRecyclerViewAdapter.ViewHolder>() {
+class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val names: Array<String>, private val gameProcess : MainViewModel.GAMEPROCESS): RecyclerView.Adapter<BidsOutcomesRecyclerViewAdapter.ViewHolder>() {
 
     companion object{
         var bids = ArrayList<Int>()
@@ -59,15 +62,26 @@ class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val n
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tv.text = names[position]
-        bids.add(-1)
-        wins.add(-1)
-        if(tempBidArr.isNotEmpty() && (tempBidArr[position] != -1)){
-            holder.inBid.setText(tempBidArr[position].toString())
-        }
-        if(tempWinArr.isNotEmpty() && (tempWinArr[position] != -1)){
-            holder.inWin.setText(tempWinArr[position].toString())
-        }
         holder.bind(position)
+        if(bids.size < numPlayers){
+            bids.add(-1)
+            wins.add(-1)
+        }
+        else{
+            if(bids[position] != -1) holder.inBid.setText("" + bids[position])
+            if(wins[position] != -1) holder.inWin.setText("" + wins[position])
+        }
+        when (gameProcess) {
+            MainViewModel.GAMEPROCESS.BIDDING -> {
+                holder.inBid.isEnabled = true
+                holder.inWin.isEnabled = false
+            }
+
+            MainViewModel.GAMEPROCESS.PLAYING -> {
+                holder.inBid.isEnabled = false
+                holder.inWin.isEnabled = true
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -76,8 +90,8 @@ class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val n
 
     fun resetArrays(){
         for(i in 0 until bids.size){
-            bids[i] = 0
-            wins[i] = 0
+            bids[i] = -1
+            wins[i] = -1
         }
     }
 

@@ -43,7 +43,7 @@ class BidsOutcomesFragment : Fragment() {
                 this.setItemViewCacheSize(12)
                 this.isNestedScrollingEnabled = false
                 layoutManager = LinearLayoutManager(context)
-                adapter = BidsOutcomesRecyclerViewAdapter(viewmodel.playerCount, nameArray, viewmodel2.tempBidArr, viewmodel2.tempWinArr)
+                adapter = BidsOutcomesRecyclerViewAdapter(viewmodel.playerCount, nameArray, viewmodel.gameProcess.value!!)
                 globalAdapter = adapter as BidsOutcomesRecyclerViewAdapter
             }
         }
@@ -181,15 +181,4 @@ class BidsOutcomesFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    override fun onPause(){
-        super.onPause()
-        if(viewmodel.gameStarted.value!!){
-            for(i in 0 until globalAdapter.obtainBids().size){
-                viewmodel2.tempBidArr.add(globalAdapter.obtainBids()[i])
-                viewmodel2.tempWinArr.add(globalAdapter.obtainWins()[i])
-            }
-        }
-    }
-
 }
