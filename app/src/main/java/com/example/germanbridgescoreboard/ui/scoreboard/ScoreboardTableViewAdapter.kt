@@ -93,7 +93,7 @@ class ScoreboardTableViewAdapter : AbstractTableAdapter<Int, String, Int>() {
 
 }*/
 
-class ScoreboardTableViewAdapter : AbstractTableAdapter<String, Int, Int>() {
+class ScoreboardTableViewAdapter(val totals: Array<Int>) : AbstractTableAdapter<String, Int, Int>() {
 
     inner class ScoreboardCellViewHolder(itemView: View) : AbstractViewHolder(itemView) {
         val cellContainer = itemView.findViewById<LinearLayout>(R.id.cell_container)
@@ -143,7 +143,7 @@ class ScoreboardTableViewAdapter : AbstractTableAdapter<String, Int, Int>() {
         val columnHeader = columnHeaderItemModel!!
 
         val viewHolder: ScoreboardColumnHeaderViewHolder = holder as ScoreboardColumnHeaderViewHolder
-        viewHolder.columnHeaderTextView.text = columnHeader
+        viewHolder.columnHeaderTextView.text = columnHeader + "\n(${totals[columnPosition]})"
     }
 
     inner class ScoreboardRowHeaderViewHolder(itemView: View) : AbstractViewHolder(itemView){

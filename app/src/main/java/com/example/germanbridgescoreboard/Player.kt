@@ -1,65 +1,49 @@
 package com.example.germanbridgescoreboard
 
-import kotlin.math.absoluteValue
+import androidx.room.ColumnInfo
+import androidx.room.Dao
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.Query
 
-class Player (rounds: Int){
-    private var name: String = ""
-    private var bid = IntArray(rounds)
-    private var win = IntArray(rounds)
-    private var score = IntArray(rounds)
-    private var winStreak: Int = 0
-    private var total: Int = 0
+@Entity
+data class Player (
+    @PrimaryKey val pid: Int,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "bids") val bids: Array<Int>,
+    @ColumnInfo(name = "wins") val wins: Array<Int>,
+    @ColumnInfo(name = "scores") val score: Array<Int>,
+    @ColumnInfo(name = "total") val total: Int
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-    fun getName(): String{
-        return name
+        other as Player
+
+        if (pid != other.pid) return false
+        if (name != other.name) return false
+        if (!bids.contentEquals(other.bids)) return false
+        if (!wins.contentEquals(other.wins)) return false
+        if (!score.contentEquals(other.score)) return false
+        if (total != other.total) return false
+
+        return true
     }
 
-    fun setName(name: String){
-        this.name = name
+    override fun hashCode(): Int {
+        var result = pid
+        result = 420769 * result + name.hashCode()
+        result = 420769 * result + bids.contentHashCode()
+        result = 420769 * result + wins.contentHashCode()
+        result = 420769 * result + score.contentHashCode()
+        result = 420769 * result + total
+        return result
     }
+}
 
-    fun getBid(round: Int): Int{
-        return bid[round]
-    }
-
-    fun setBid(round: Int, bid: Int){
-        this.bid[round] = bid
-    }
-
-    fun getWin(round: Int): Int{
-        return win[round]
-    }
-
-    fun setWin(round: Int, win: Int){
-        this.win[round] = win
-    }
-
-    fun getScore(bid: Int, win: Int): Int{
-        var score: Int = 0
-        if(bid == win){
-            score = 10 + bid*win
-            return score
-        }
-        else{
-            score = (bid-win).absoluteValue
-            return -score
-        }
-    }
-
-    fun setScore(round: Int, score: Int){
-        this.score[round] = score
-    }
-
-
-    fun updateWinStreak(round: Int){
-        if (bid[round] == win[round]) winStreak++ else winStreak = 0
-    }
-
-    fun updateTotal(){
-        total = score.sum()
-    }
-
-    fun getTotal(): Int{
-        return total
-    }
+@Dao
+interface PlayerDao {
+    @Query("SELECT * FROM player")
+    fun getPlayers(): List<Player>
 }

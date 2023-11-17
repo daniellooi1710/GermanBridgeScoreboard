@@ -22,4 +22,5 @@
     <string name="game_not_started">Game not started</string>
     <string name="test">test</string>
     <string name="rule_violation">Rule Violation</string>
+    <string name="preference_file_key">PREFERENCE_FILE_KEY</string>
 </resources>

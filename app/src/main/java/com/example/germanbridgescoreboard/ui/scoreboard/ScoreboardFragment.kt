@@ -28,7 +28,7 @@ class ScoreboardFragment : Fragment() {
         val root: View = binding.root
 
         val tableView = root.findViewById<TableView>(R.id.tableView)
-        val adapter = ScoreboardTableViewAdapter()
+        val adapter = ScoreboardTableViewAdapter(viewmodel.total)
 
         tableView.setAdapter(adapter)
 
