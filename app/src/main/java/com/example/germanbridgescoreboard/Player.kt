@@ -33,11 +33,11 @@ data class Player (
 
     override fun hashCode(): Int {
         var result = pid
-        result = 420769 * result + name.hashCode()
-        result = 420769 * result + bids.contentHashCode()
-        result = 420769 * result + wins.contentHashCode()
-        result = 420769 * result + score.contentHashCode()
-        result = 420769 * result + total
+        result = 769 * result + name.hashCode()
+        result = 769 * result + bids.contentHashCode()
+        result = 769 * result + wins.contentHashCode()
+        result = 769 * result + score.contentHashCode()
+        result = 769 * result + total
         return result
     }
 }
