@@ -1,55 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.evrencoskun.tableview.TableView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tableView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:clipChildren="false"
-    android:contextClickable="false"
-    android:scrollbarAlwaysDrawHorizontalTrack="false"
-    android:scrollbarAlwaysDrawVerticalTrack="false"
-    app:column_header_height="48dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <com.evrencoskun.tableview.TableView
 
-</com.evrencoskun.tableview.TableView>
-<!--
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollView2"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:clickable="false"
-    android:clipChildren="false"
-    android:scrollbarAlwaysDrawHorizontalTrack="false"
-    android:scrollbarAlwaysDrawVerticalTrack="false"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
-
-    <HorizontalScrollView
-        android:layout_width="fill_parent"
+        android:id="@+id/tableView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="false"
         android:clipChildren="false"
+        android:contextClickable="false"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
-        android:scrollbarAlwaysDrawVerticalTrack="false">
-
-        <com.evrencoskun.tableview.TableView
-            android:id="@+id/tableView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clipChildren="false"
-            android:contextClickable="false"
-            android:scrollbarAlwaysDrawHorizontalTrack="false"
-            android:scrollbarAlwaysDrawVerticalTrack="false"
-            app:column_header_height="48dp">
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        app:column_header_height="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
-        </com.evrencoskun.tableview.TableView>
+    </com.evrencoskun.tableview.TableView>
 
-    </HorizontalScrollView>
-</ScrollView>-->
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/no_game_to_show"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

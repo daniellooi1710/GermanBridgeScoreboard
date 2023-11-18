@@ -1,49 +1,69 @@
 package com.example.germanbridgescoreboard
 
-import androidx.room.ColumnInfo
 import androidx.room.Dao
+import androidx.room.Database
+import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import androidx.room.Relation
+import androidx.room.RoomDatabase
 
 @Entity
 data class Player (
     @PrimaryKey val pid: Int,
-    @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "bids") val bids: Array<Int>,
-    @ColumnInfo(name = "wins") val wins: Array<Int>,
-    @ColumnInfo(name = "scores") val score: Array<Int>,
-    @ColumnInfo(name = "total") val total: Int
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+    val name: String,
+    val total: Int
+)
 
-        other as Player
+@Entity(foreignKeys = [ForeignKey(
+    entity = Player::class,
+    parentColumns = ["pid"],
+    childColumns = ["pid"],
+    onDelete = ForeignKey.CASCADE
+)], primaryKeys = ["round", "pid"])
+data class Round (
+    val round: Int,
+    val pid: Int,
+    val bid: Int,
+    val win: Int,
+    val score: Int
+)
 
-        if (pid != other.pid) return false
-        if (name != other.name) return false
-        if (!bids.contentEquals(other.bids)) return false
-        if (!wins.contentEquals(other.wins)) return false
-        if (!score.contentEquals(other.score)) return false
-        if (total != other.total) return false
+data class PlayerRound(
+    @Embedded val pid: Int,
+    @Relation(
+        parentColumn = "pid",
+        entityColumn = "round"
+    )
+    val rounds: List<Round>
+)
 
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = pid
-        result = 769 * result + name.hashCode()
-        result = 769 * result + bids.contentHashCode()
-        result = 769 * result + wins.contentHashCode()
-        result = 769 * result + score.contentHashCode()
-        result = 769 * result + total
-        return result
-    }
+@Database(entities = [Player::class, Round::class], version = 1)
+abstract class PlayerDatabase : RoomDatabase() {
+    abstract fun playerRoundDao(): PlayerRoundDao
 }
 
 @Dao
-interface PlayerDao {
+interface PlayerRoundDao {
     @Query("SELECT * FROM player")
     fun getPlayers(): List<Player>
+
+    @Query("SELECT * FROM round WHERE (pid = :pid AND round = :round)")
+    fun getPlayerRound(pid: Int, round: Int): List<Round>
+
+    @Query("DELETE FROM player")
+    fun clearPlayerTable()
+
+    @Query("DELETE FROM round")
+    fun clearRoundTable()
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun addPlayer(player: Player)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun addPlayerRound(round: Round)
 }

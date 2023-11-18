@@ -1,30 +1,82 @@
 package com.example.germanbridgescoreboard
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.room.Room
 import com.example.germanbridgescoreboard.databinding.ActivityMainBinding
 import com.example.germanbridgescoreboard.ui.gameinit.InputPlayerRecyclerViewAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    val viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
-    val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-    val gameOngoing = sharedPref.getBoolean("game_ongoing", false)
+    private lateinit var viewmodel : MainViewModel
+    private lateinit var sharedPref: SharedPreferences
+    private var gameOngoing = false
+    private lateinit var db : PlayerDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
+        sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        gameOngoing = sharedPref.getBoolean("game_ongoing", false)
 
+        db = Room.databaseBuilder(
+            applicationContext,
+            PlayerDatabase::class.java,
+            getString(R.string.database_name)
+        ).allowMainThreadQueries().build()
+
+        if(gameOngoing) {
+            val playerCount = sharedPref.getInt("player_count", 0)
+            val currentRound = sharedPref.getInt("current_round", 0)
+            val gamePlaying = sharedPref.getBoolean("game_playing", false)
+            val gameEnded = sharedPref.getBoolean("game_ended", false)
+            var gameprocess : MainViewModel.GAMEPROCESS
+
+            viewmodel.playerNum.value = playerCount
+            viewmodel.initGame()
+
+            try{
+                val playerRoundDao = db.playerRoundDao()
+                val players = playerRoundDao.getPlayers()
+
+                for(i in 0 until playerCount){
+                    viewmodel.players[i] = players[i].name
+                    viewmodel.total[i] = players[i].total
+                    for (j in 0 until viewmodel.rounds){
+                        val roundList = playerRoundDao.getPlayerRound(i, j)
+                        val round = roundList[0]
+                        viewmodel.playerBids[i][j] = round.bid
+                        viewmodel.playerWins[i][j] = round.win
+                        viewmodel.playerScoresT[j][i] = round.score
+                    }
+                }
+
+                viewmodel.currentRound.value = currentRound
+
+                if(gamePlaying) gameprocess = MainViewModel.GAMEPROCESS.PLAYING
+                else if(gameEnded) gameprocess = MainViewModel.GAMEPROCESS.ENDED
+                else gameprocess = MainViewModel.GAMEPROCESS.BIDDING
+
+                viewmodel.gameProcess.value = gameprocess
+
+                playerRoundDao.clearPlayerTable()
+                playerRoundDao.clearRoundTable()
+            }
+            catch(e: Exception){
+                viewmodel.newGame()
+            }
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -57,7 +109,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle presses on the action bar menu items
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        //val viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
         val adapter = InputPlayerRecyclerViewAdapter(viewmodel.playerCount)
         when (item.itemId) {
             android.R.id.home -> {
@@ -89,13 +140,54 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if(viewmodel.gameStarted.value == true){
+        if(viewmodel.gameProcess.value != MainViewModel.GAMEPROCESS.INIT){
             with (sharedPref.edit()){
                 putInt("player_count", viewmodel.playerCount)
-                putInt("rounds", viewmodel.rounds)
                 putInt("current_round", viewmodel.currentRound.value!!)
                 putBoolean("game_ongoing", true)
-                if(viewmodel.gameProcess.value == MainViewModel.GAMEPROCESS.BIDDING) putBoolean("game_playing", false) else putBoolean("game_playing", true)
+                when(viewmodel.gameProcess.value){
+                    MainViewModel.GAMEPROCESS.BIDDING -> {
+                        putBoolean("game_playing", false)
+                        putBoolean("game_ended", false)
+                    }
+                    MainViewModel.GAMEPROCESS.PLAYING -> {
+                        putBoolean("game_playing", true)
+                        putBoolean("game_ended", false)
+                    }
+                    MainViewModel.GAMEPROCESS.ENDED -> {
+                        putBoolean("game_playing", false)
+                        putBoolean("game_ended", true)
+                    }
+                    else -> {
+                        // No Implementation
+                    }
+                }
+                apply()
+            }
+
+            val playerDao = db.playerRoundDao()
+
+            for(i in 0 until viewmodel.playerCount){
+                val name = viewmodel.players[i]
+                val total = viewmodel.total[i]
+                val player = Player(i, name, total)
+                playerDao.addPlayer(player)
+
+                val bids = viewmodel.playerBids[i].clone()
+                val wins = viewmodel.playerWins[i].clone()
+                var scores = Array(viewmodel.rounds){0}
+                for(j in 0 until viewmodel.rounds){
+                    scores[j] = viewmodel.playerScoresT[j][i]
+                }
+                for (j in 0 until viewmodel.rounds){
+                    val round = Round(j, i, bids[j], wins[j], scores[j])
+                    playerDao.addPlayerRound(round)
+                }
+            }
+        }
+        else{
+            with (sharedPref.edit()){
+                putBoolean("game_ongoing", false)
                 apply()
             }
         }

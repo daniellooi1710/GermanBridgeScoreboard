@@ -1,9 +1,12 @@
 package com.example.germanbridgescoreboard.ui.scoreboard
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintSet.GONE
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.evrencoskun.tableview.TableView
@@ -32,7 +35,8 @@ class ScoreboardFragment : Fragment() {
 
         tableView.setAdapter(adapter)
 
-        if(viewmodel.gameStarted.value!!){
+        if(viewmodel.gameProcess.value != MainViewModel.GAMEPROCESS.INIT){
+            root.findViewById<TextView>(R.id.textView4).visibility = View.GONE
             val ch = ArrayList<Int>()
             for(i in 1 .. viewmodel.rounds) ch.add(i)
             val ch2 = ch as MutableList<Int>
@@ -57,6 +61,7 @@ class ScoreboardFragment : Fragment() {
             }
             adapter.setAllItems(rh2, ch2, cells2T) // swapped row and column
         }
+        else root.findViewById<TextView>(R.id.textView4).visibility = View.VISIBLE
 
         return root
     }

@@ -16,7 +16,6 @@ import com.google.android.material.textfield.TextInputEditText
 
 class BidsOutcomesFragment : Fragment() {
     private val viewmodel: MainViewModel by activityViewModels()
-    private val viewmodel2 = BidsOutcomesViewModel()
     private var _binding: FragmentBidsOutcomesBinding? = null
     lateinit var globalAdapter : BidsOutcomesRecyclerViewAdapter
 
@@ -32,44 +31,51 @@ class BidsOutcomesFragment : Fragment() {
 
         val view2 = root.findViewById<RecyclerView>(R.id.bid_win_table)
 
-        if(viewmodel.playerCount == 0) {
-            binding.buttonNext.visibility = View.GONE
-            binding.textViewGameProcess.text = getString(R.string.game_not_started)
-        }
-
         if(viewmodel.playerCount > 0) {
             val nameArray = viewmodel.players
             with(view2) {
                 this.setItemViewCacheSize(12)
                 this.isNestedScrollingEnabled = false
                 layoutManager = LinearLayoutManager(context)
-                adapter = BidsOutcomesRecyclerViewAdapter(viewmodel.playerCount, nameArray, viewmodel.gameProcess.value!!)
+
+                val currentRoundBids = Array<Int>(viewmodel.playerCount){0}
+                for (i in 0 until viewmodel.playerCount) currentRoundBids[i] = viewmodel.playerBids[i][viewmodel.currentRound.value!! - 1]
+
+                adapter = BidsOutcomesRecyclerViewAdapter(
+                    viewmodel.playerCount,
+                    nameArray,
+                    viewmodel.gameProcess.value!!,
+                    currentRoundBids
+                )
                 globalAdapter = adapter as BidsOutcomesRecyclerViewAdapter
             }
         }
-
-        viewmodel2.tempBidArr.clear()
-        viewmodel2.tempWinArr.clear()
 
         viewmodel.currentRound.observe(viewLifecycleOwner) {
             binding.textViewRoundNumber.text = it.toString()
         }
 
         viewmodel.gameProcess.observe(viewLifecycleOwner) {
-            if (viewmodel.gameStarted.value!!) {
-                when (it) {
-                    MainViewModel.GAMEPROCESS.BIDDING -> {
-                        binding.textViewGameProcess.text = getString(R.string.bidding)
-                        binding.buttonDone.visibility = View.GONE
-                        binding.buttonNext.visibility = View.VISIBLE
-                    }
-
-                    MainViewModel.GAMEPROCESS.PLAYING -> {
-                        binding.textViewGameProcess.text = getString(R.string.playing)
-                        binding.buttonNext.visibility = View.GONE
-                        binding.buttonDone.visibility = View.VISIBLE
-
-                    }
+            when (it) {
+                MainViewModel.GAMEPROCESS.INIT -> {
+                    binding.buttonNext.visibility = View.GONE
+                    binding.buttonDone.visibility = View.GONE
+                    binding.textViewGameProcess.text = getString(R.string.game_not_started)
+                }
+                MainViewModel.GAMEPROCESS.BIDDING -> {
+                    binding.textViewGameProcess.text = getString(R.string.bidding)
+                    binding.buttonDone.visibility = View.GONE
+                    binding.buttonNext.visibility = View.VISIBLE
+                }
+                MainViewModel.GAMEPROCESS.PLAYING -> {
+                    binding.textViewGameProcess.text = getString(R.string.playing)
+                    binding.buttonNext.visibility = View.GONE
+                    binding.buttonDone.visibility = View.VISIBLE
+                }
+                MainViewModel.GAMEPROCESS.ENDED -> {
+                    binding.textViewGameProcess.text = getString(R.string.game_ended)
+                    binding.buttonNext.visibility = View.GONE
+                    binding.buttonDone.visibility = View.GONE
                 }
             }
         }
@@ -83,7 +89,7 @@ class BidsOutcomesFragment : Fragment() {
                 builder
                     .setMessage("Total number of bids cannot be equal to the number of current round.")
                     .setTitle(getString(R.string.rule_violation))
-                    .setNeutralButton("Okay") { _, _ -> }
+                    .setPositiveButton("Okay") { _, _ -> }
                 val dialog: AlertDialog = builder.create()
                 dialog.show()
             }
@@ -113,8 +119,8 @@ class BidsOutcomesFragment : Fragment() {
             }
 
             if(!error){
-                for(i in 0 until viewmodel.playerCount) viewmodel.playerBids[i][viewmodel.currentRound.value!! - 1] = globalAdapter.obtainBids()[i]
                 for(i in 0 until viewmodel.playerCount){
+                    viewmodel.playerBids[i][viewmodel.currentRound.value!! - 1] = globalAdapter.obtainBids()[i]
                     view2.findViewWithTag<TextInputEditText>("b$i").isEnabled = false
                     view2.findViewWithTag<TextInputEditText>("w$i").isEnabled = true
                 }
@@ -131,7 +137,7 @@ class BidsOutcomesFragment : Fragment() {
                 builder
                     .setMessage("Number of wins must be equal to the number of current round.")
                     .setTitle(getString(R.string.rule_violation))
-                    .setNeutralButton("Okay") { _, _ -> }
+                    .setPositiveButton("Okay") { _, _ -> }
                 val dialog: AlertDialog = builder.create()
                 dialog.show()
             }
@@ -161,16 +167,16 @@ class BidsOutcomesFragment : Fragment() {
             }
 
             if(!error){
-                for(i in 0 until viewmodel.playerCount) viewmodel.playerWins[i][viewmodel.currentRound.value!! - 1] = globalAdapter.obtainWins()[i]
-                viewmodel.calcScores()
-                viewmodel.bidding()
-                globalAdapter.resetArrays()
                 for(i in 0 until viewmodel.playerCount){
+                    viewmodel.playerWins[i][viewmodel.currentRound.value!! - 1] = globalAdapter.obtainWins()[i]
                     view2.findViewWithTag<TextInputEditText>("b$i").isEnabled = true
                     view2.findViewWithTag<TextInputEditText>("b$i").setText("")
                     view2.findViewWithTag<TextInputEditText>("w$i").setText("")
                     view2.findViewWithTag<TextInputEditText>("w$i").isEnabled = false
                 }
+                viewmodel.calcScores()
+                viewmodel.bidding()
+                globalAdapter.resetArrays()
                 if(viewmodel.currentRound.value == viewmodel.rounds) viewmodel.endGame() else viewmodel.nextRound()
             }
         }

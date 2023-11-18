@@ -17,7 +17,6 @@ import com.example.germanbridgescoreboard.R
 
 class InputPlayerFragment : Fragment(){
     private val viewmodel: MainViewModel by activityViewModels()
-    private var columnCount = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,16 +27,14 @@ class InputPlayerFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_game_init, container, false)
 
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
                 this.setItemViewCacheSize(12)
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
+                layoutManager = LinearLayoutManager(context)
                 adapter = InputPlayerRecyclerViewAdapter(viewmodel.playerCount)
             }
         }

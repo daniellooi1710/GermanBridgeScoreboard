@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs")
+    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -13,9 +15,17 @@ android {
         minSdk = 28
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.2"
+        versionName = "1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "room.incremental" to "true"
+                )
+            }
+        }
     }
 
     buildTypes {
@@ -59,7 +69,8 @@ dependencies {
     implementation("com.github.evrencoskun:TableView:v0.8.9.4")
     val room_version = "2.6.0"
     implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.9.20-1.0.14")
+    ksp("androidx.room:room-compiler:$room_version")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

@@ -8,11 +8,12 @@ import kotlin.math.pow
 
 class MainViewModel : ViewModel() {
     enum class GAMEPROCESS{
+        INIT,
         BIDDING,
-        PLAYING
+        PLAYING,
+        ENDED
     }
 
-    var gameStarted = MutableLiveData(false)
     var gameProcess = MutableLiveData(GAMEPROCESS.BIDDING)
 
     var playerCount: Int = 0
@@ -43,19 +44,18 @@ class MainViewModel : ViewModel() {
     }
 
     fun startGame(){
-        gameStarted.value = true
         gameProcess.value = GAMEPROCESS.BIDDING
         currentRound.value = 1
     }
 
     fun newGame(){
-        gameStarted.value = false
+        gameProcess.value = GAMEPROCESS.INIT
         playerCount = 0
         currentRound.value = 0
     }
 
     fun endGame(){
-        gameStarted.value = false
+        gameProcess.value = GAMEPROCESS.ENDED
     }
 
     fun calcScores(){

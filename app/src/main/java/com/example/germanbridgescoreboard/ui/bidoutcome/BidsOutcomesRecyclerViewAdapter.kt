@@ -10,7 +10,7 @@ import com.example.germanbridgescoreboard.MainViewModel
 import com.example.germanbridgescoreboard.R
 import com.example.germanbridgescoreboard.databinding.FragmentBidWinBinding
 
-class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val names: Array<String>, private val gameProcess : MainViewModel.GAMEPROCESS): RecyclerView.Adapter<BidsOutcomesRecyclerViewAdapter.ViewHolder>() {
+class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val names: Array<String>, private val gameProcess : MainViewModel.GAMEPROCESS, private val currentRoundBids : Array<Int>): RecyclerView.Adapter<BidsOutcomesRecyclerViewAdapter.ViewHolder>() {
 
     companion object{
         var bids = ArrayList<Int>()
@@ -32,7 +32,7 @@ class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val n
                     // Implementation was unnecessary
                 },
                 fun (text: Editable?) {
-                    if(text.toString() == "") bids[pos] = 0 else bids[pos] = text.toString().toInt()
+                    if(text.toString() == "") bids[pos] = -1 else bids[pos] = text.toString().toInt()
                 }
             )
             inWin.tag = "w${pos}"
@@ -44,7 +44,7 @@ class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val n
                     // Implementation was unnecessary
                 },
                 fun (text: Editable?) {
-                    if(text.toString() == "") wins[pos] = 0 else wins[pos] = text.toString().toInt()
+                    if(text.toString() == "") wins[pos] = -1 else wins[pos] = text.toString().toInt()
                 }
             )
         }
@@ -72,12 +72,16 @@ class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val n
             if(wins[position] != -1) holder.inWin.setText("" + wins[position])
         }
         when (gameProcess) {
+            MainViewModel.GAMEPROCESS.INIT, MainViewModel.GAMEPROCESS.ENDED -> {
+                holder.inBid.isEnabled = false
+                holder.inWin.isEnabled = false
+            }
             MainViewModel.GAMEPROCESS.BIDDING -> {
                 holder.inBid.isEnabled = true
                 holder.inWin.isEnabled = false
             }
-
             MainViewModel.GAMEPROCESS.PLAYING -> {
+                holder.inBid.setText("" + currentRoundBids[position])
                 holder.inBid.isEnabled = false
                 holder.inWin.isEnabled = true
             }

@@ -27,25 +27,35 @@ class HomeFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        // viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        viewmodel.gameStarted.observe(viewLifecycleOwner) {
-            if (viewmodel.gameStarted.value!!) {
-                binding.textView.setBackgroundColor(Color.GREEN)
-                binding.textView.setText(R.string.game_ongoing)
-                binding.buttonMinus.isEnabled = false
-                binding.buttonPlus.isEnabled = false
-                binding.buttonStart.isEnabled = false
-                binding.buttonNew.isEnabled = true
-            } else {
-                binding.textView.setBackgroundColor(Color.YELLOW)
-                binding.textView.setText(R.string.init_game)
-                binding.buttonStart.isEnabled = true
-                binding.buttonNew.isEnabled = false
-                binding.buttonMinus.isEnabled = true
-                binding.buttonPlus.isEnabled = true
+        viewmodel.gameProcess.observe(viewLifecycleOwner) {
+            when(it){
+                MainViewModel.GAMEPROCESS.INIT -> {
+                    binding.textView.setBackgroundColor(Color.YELLOW)
+                    binding.textView.setText(R.string.init_game)
+                    binding.buttonStart.isEnabled = true
+                    binding.buttonNew.isEnabled = false
+                    binding.buttonMinus.isEnabled = true
+                    binding.buttonPlus.isEnabled = true
+                }
+                MainViewModel.GAMEPROCESS.BIDDING, MainViewModel.GAMEPROCESS.PLAYING -> {
+                    binding.textView.setBackgroundColor(Color.GREEN)
+                    binding.textView.setText(R.string.game_ongoing)
+                    binding.buttonMinus.isEnabled = false
+                    binding.buttonPlus.isEnabled = false
+                    binding.buttonStart.isEnabled = false
+                    binding.buttonNew.isEnabled = true
+                }
+                MainViewModel.GAMEPROCESS.ENDED -> {
+                    binding.textView.setBackgroundColor(Color.RED)
+                    binding.textView.setText(R.string.game_ended)
+                    binding.buttonMinus.isEnabled = false
+                    binding.buttonPlus.isEnabled = false
+                    binding.buttonStart.isEnabled = false
+                    binding.buttonNew.isEnabled = true
+                }
             }
         }
 
@@ -94,5 +104,4 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
