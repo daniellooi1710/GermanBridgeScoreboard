@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.room.Room
 import com.germanbridgescoreboard.databinding.ActivityMainBinding
 import com.germanbridgescoreboard.ui.gameinit.InputPlayerRecyclerViewAdapter
+import com.germanbridgescoreboard.ui.scoreboard.ScoreboardFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {

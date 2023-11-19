@@ -4,13 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.evrencoskun.tableview.TableView
+import com.germanbridgescoreboard.MainViewModel
 import com.germanbridgescoreboard.R
 import com.germanbridgescoreboard.databinding.FragmentScoreboardBinding
-import com.germanbridgescoreboard.MainViewModel
 
 class ScoreboardFragment : Fragment() {
     private val viewmodel : MainViewModel by activityViewModels()
@@ -27,6 +32,9 @@ class ScoreboardFragment : Fragment() {
     ): View {
         _binding = FragmentScoreboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        val btRanking = root.findViewById<Button>(R.id.buttonViewRanking)
+        btRanking.visibility = View.VISIBLE
 
         val tableView = root.findViewById<TableView>(R.id.tableView)
 
@@ -53,7 +61,48 @@ class ScoreboardFragment : Fragment() {
             }
             adapter.setAllItems(rh2, ch2, cells2T) // swapped row and column
         }
-        else root.findViewById<TextView>(R.id.textView4).visibility = View.VISIBLE
+        else {
+            btRanking.visibility = View.GONE
+            root.findViewById<TextView>(R.id.textView4).visibility = View.VISIBLE
+        }
+
+        btRanking.setOnClickListener {
+            var pNameR = viewmodel.players.clone()
+            var pTotalR = viewmodel.total.clone()
+
+            for(i in 0 until (viewmodel.playerCount - 1)) {
+                var swapped = false
+                for (j in 0 until (viewmodel.playerCount - i - 1)) {
+                    if (pTotalR[j] < pTotalR[j + 1]){
+                        val tempTotal = pTotalR[j]
+                        pTotalR[j] = pTotalR[j + 1]
+                        pTotalR[j + 1] = tempTotal
+
+                        val tempName = pNameR[j]
+                        pNameR[j] = pNameR[j + 1]
+                        pNameR[j + 1] = tempName
+                        swapped = true
+                    }
+                }
+
+                // If no two elements were swapped by inner loop, then break
+                if (!swapped) break
+            }
+
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            val inflater = layoutInflater
+            val dialogView = inflater.inflate(R.layout.dialog_ranking_list, null)
+            val rv = dialogView.findViewById<RecyclerView>(R.id.rankingRecyclerView)
+            rv.layoutManager = LinearLayoutManager(activity)
+            rv.adapter = RankingRecyclerViewAdapter(requireContext(), viewmodel.playerCount, pNameR, pTotalR)
+            builder
+                .setTitle("Game Rankings")
+                .setView(dialogView)
+                .setPositiveButton("Okay") { _, _ -> }
+            val dialog: AlertDialog = builder.create()
+            dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+            dialog.show()
+        }
 
         return root
     }
