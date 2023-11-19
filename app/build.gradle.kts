@@ -7,15 +7,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.germanbridgescoreboard"
+    namespace = "com.germanbridgescoreboard"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.germanbridgescoreboard"
+        applicationId = "com.germanbridgescoreboard"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
-        versionName = "1.1.2"
+        versionName = "1.1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {

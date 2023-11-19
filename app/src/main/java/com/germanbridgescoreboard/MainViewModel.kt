@@ -1,4 +1,4 @@
-package com.example.germanbridgescoreboard
+package com.germanbridgescoreboard
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,7 +28,6 @@ class MainViewModel : ViewModel() {
     lateinit var players : Array<String>
     lateinit var playerBids : Array<Array<Int>>
     lateinit var playerWins : Array<Array<Int>>
-    lateinit var playerScores : Array<Array<Int>>
     lateinit var playerScoresT : Array<Array<Int>>
 
     fun initGame(){
@@ -39,7 +38,6 @@ class MainViewModel : ViewModel() {
 
         playerBids = Array(playerCount){Array(rounds){0}}
         playerWins = Array(playerCount){Array(rounds){0}}
-        playerScores = Array(playerCount){Array(rounds){0}}
         playerScoresT = Array(rounds){Array(playerCount){0}}
     }
 

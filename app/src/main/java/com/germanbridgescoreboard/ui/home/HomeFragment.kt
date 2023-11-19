@@ -1,4 +1,4 @@
-package com.example.germanbridgescoreboard.ui.home
+package com.germanbridgescoreboard.ui.home
 
 import android.graphics.Color
 import android.os.Bundle
@@ -11,9 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import com.example.germanbridgescoreboard.MainViewModel
-import com.example.germanbridgescoreboard.R
-import com.example.germanbridgescoreboard.databinding.FragmentHomeBinding
+import com.germanbridgescoreboard.MainViewModel
+import com.germanbridgescoreboard.R
+import com.germanbridgescoreboard.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
     private val viewmodel: MainViewModel by activityViewModels()

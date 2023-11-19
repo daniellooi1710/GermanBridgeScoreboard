@@ -1,6 +1,7 @@
-package com.example.germanbridgescoreboard
+package com.germanbridgescoreboard
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
@@ -13,8 +14,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.room.Room
-import com.example.germanbridgescoreboard.databinding.ActivityMainBinding
-import com.example.germanbridgescoreboard.ui.gameinit.InputPlayerRecyclerViewAdapter
+import com.germanbridgescoreboard.databinding.ActivityMainBinding
+import com.germanbridgescoreboard.ui.gameinit.InputPlayerRecyclerViewAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +25,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var db : PlayerDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!isTaskRoot) {
+            val intent = intent
+            val intentAction = intent.action
+            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intentAction != null &&
+                intentAction == Intent.ACTION_MAIN
+            ) {
+                finish()
+                return
+            }
+        }
 
         viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
         sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
@@ -63,9 +75,9 @@ class MainActivity : AppCompatActivity() {
 
                 viewmodel.currentRound.value = currentRound
 
-                if(gamePlaying) gameprocess = MainViewModel.GAMEPROCESS.PLAYING
-                else if(gameEnded) gameprocess = MainViewModel.GAMEPROCESS.ENDED
-                else gameprocess = MainViewModel.GAMEPROCESS.BIDDING
+                gameprocess = if(gamePlaying) MainViewModel.GAMEPROCESS.PLAYING
+                else if(gameEnded) MainViewModel.GAMEPROCESS.ENDED
+                else MainViewModel.GAMEPROCESS.BIDDING
 
                 viewmodel.gameProcess.value = gameprocess
 

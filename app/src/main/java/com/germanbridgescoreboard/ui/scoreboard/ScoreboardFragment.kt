@@ -1,18 +1,16 @@
-package com.example.germanbridgescoreboard.ui.scoreboard
+package com.germanbridgescoreboard.ui.scoreboard
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintSet.GONE
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.evrencoskun.tableview.TableView
-import com.example.germanbridgescoreboard.MainViewModel
-import com.example.germanbridgescoreboard.R
-import com.example.germanbridgescoreboard.databinding.FragmentScoreboardBinding
+import com.germanbridgescoreboard.R
+import com.germanbridgescoreboard.databinding.FragmentScoreboardBinding
+import com.germanbridgescoreboard.MainViewModel
 
 class ScoreboardFragment : Fragment() {
     private val viewmodel : MainViewModel by activityViewModels()

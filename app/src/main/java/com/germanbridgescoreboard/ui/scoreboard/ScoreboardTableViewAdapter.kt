@@ -1,19 +1,17 @@
-package com.example.germanbridgescoreboard.ui.scoreboard
+package com.germanbridgescoreboard.ui.scoreboard
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
-import com.example.germanbridgescoreboard.R
+import com.germanbridgescoreboard.R
 
-class ScoreboardTableViewAdapter(val totals: Array<Int>) : AbstractTableAdapter<String, Int, Int>() {
+class ScoreboardTableViewAdapter(private val totals: Array<Int>) : AbstractTableAdapter<String, Int, Int>() {
 
     inner class ScoreboardCellViewHolder(itemView: View) : AbstractViewHolder(itemView) {
-        val cellContainer = itemView.findViewById<LinearLayout>(R.id.cell_container)
-        val cellTextView = itemView.findViewById<TextView>(R.id.cell_data)
+        val cellTextView: TextView = itemView.findViewById(R.id.cell_data)
         init{
             super.itemView
         }
@@ -36,8 +34,7 @@ class ScoreboardTableViewAdapter(val totals: Array<Int>) : AbstractTableAdapter<
     }
 
     inner class ScoreboardColumnHeaderViewHolder(itemView: View) : AbstractViewHolder(itemView){
-        val columnHeaderContainer = itemView.findViewById<LinearLayout>(R.id.column_header_container)
-        val columnHeaderTextView = itemView.findViewById<TextView>(R.id.column_header_textView)
+        val columnHeaderTextView: TextView = itemView.findViewById(R.id.column_header_textView)
         init{
             super.itemView
         }
@@ -63,8 +60,7 @@ class ScoreboardTableViewAdapter(val totals: Array<Int>) : AbstractTableAdapter<
     }
 
     inner class ScoreboardRowHeaderViewHolder(itemView: View) : AbstractViewHolder(itemView){
-        val rowHeaderContainer = itemView.findViewById<LinearLayout>(R.id.row_header_container)
-        val rowHeaderTextView = itemView.findViewById<TextView>(R.id.row_header_textView)
+        val rowHeaderTextView: TextView = itemView.findViewById(R.id.row_header_textView)
         init{
             super.itemView
         }

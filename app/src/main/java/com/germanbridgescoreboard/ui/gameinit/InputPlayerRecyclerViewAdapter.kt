@@ -1,12 +1,11 @@
-package com.example.germanbridgescoreboard.ui.gameinit
+package com.germanbridgescoreboard.ui.gameinit
 
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import com.example.germanbridgescoreboard.databinding.FragmentInputBinding
-
+import com.germanbridgescoreboard.databinding.FragmentInputBinding
 
 class InputPlayerRecyclerViewAdapter(private val num: Int) : RecyclerView.Adapter<InputPlayerRecyclerViewAdapter.ViewHolder>() {
     companion object{
@@ -31,9 +30,8 @@ class InputPlayerRecyclerViewAdapter(private val num: Int) : RecyclerView.Adapte
     }
 
     inner class ViewHolder(binding: FragmentInputBinding) : RecyclerView.ViewHolder(binding.root) {
-        var myTextView = binding.playerNum
-        var myTextInputLayout = binding.inputPlayerNameField
-        var myTextInputEditText = binding.inputPlayerName
+        private var myTextView = binding.playerNum
+        private var myTextInputEditText = binding.inputPlayerName
 
         fun append(position: Int){
             val text = "${myTextView.text} ${position + 1}"

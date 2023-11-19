@@ -1,5 +1,6 @@
-package com.example.germanbridgescoreboard.ui.bidoutcome
+package com.germanbridgescoreboard.ui.bidoutcome
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.germanbridgescoreboard.MainViewModel
-import com.example.germanbridgescoreboard.R
-import com.example.germanbridgescoreboard.databinding.FragmentBidsOutcomesBinding
+import com.germanbridgescoreboard.MainViewModel
+import com.germanbridgescoreboard.R
+import com.germanbridgescoreboard.databinding.FragmentBidsOutcomesBinding
 import com.google.android.material.textfield.TextInputEditText
 
 class BidsOutcomesFragment : Fragment() {
     private val viewmodel: MainViewModel by activityViewModels()
     private var _binding: FragmentBidsOutcomesBinding? = null
-    lateinit var globalAdapter : BidsOutcomesRecyclerViewAdapter
+    private lateinit var globalAdapter : BidsOutcomesRecyclerViewAdapter
 
     private val binding get() = _binding!!
 
@@ -58,22 +59,26 @@ class BidsOutcomesFragment : Fragment() {
         viewmodel.gameProcess.observe(viewLifecycleOwner) {
             when (it) {
                 MainViewModel.GAMEPROCESS.INIT -> {
+                    binding.textViewGameProcess.text = getString(R.string.game_not_started)
+                    binding.textViewGameProcess.setTextColor(Color.RED)
                     binding.buttonNext.visibility = View.GONE
                     binding.buttonDone.visibility = View.GONE
-                    binding.textViewGameProcess.text = getString(R.string.game_not_started)
                 }
                 MainViewModel.GAMEPROCESS.BIDDING -> {
                     binding.textViewGameProcess.text = getString(R.string.bidding)
+                    binding.textViewGameProcess.setTextColor(Color.rgb(200, 88, 5))
                     binding.buttonDone.visibility = View.GONE
                     binding.buttonNext.visibility = View.VISIBLE
                 }
                 MainViewModel.GAMEPROCESS.PLAYING -> {
                     binding.textViewGameProcess.text = getString(R.string.playing)
+                    binding.textViewGameProcess.setTextColor(Color.rgb(5, 100, 5))
                     binding.buttonNext.visibility = View.GONE
                     binding.buttonDone.visibility = View.VISIBLE
                 }
                 MainViewModel.GAMEPROCESS.ENDED -> {
                     binding.textViewGameProcess.text = getString(R.string.game_ended)
+                    binding.textViewGameProcess.setTextColor(Color.rgb(25, 1, 100))
                     binding.buttonNext.visibility = View.GONE
                     binding.buttonDone.visibility = View.GONE
                 }
@@ -83,8 +88,29 @@ class BidsOutcomesFragment : Fragment() {
         binding.buttonNext.setOnClickListener{
             var error = false
             val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-
-            if(globalAdapter.obtainBids().sum() == viewmodel.currentRound.value){
+            for(i in 0 until viewmodel.playerCount){
+                if(globalAdapter.obtainBids()[i] == -1){
+                    error = true
+                    builder
+                        .setMessage("Player's number of bids cannot be null.")
+                        .setTitle(getString(R.string.rule_violation))
+                        .setPositiveButton("Okay") { _, _ -> }
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                    break
+                }
+                if(globalAdapter.obtainBids()[i] > viewmodel.currentRound.value!!){
+                    error = true
+                    builder
+                        .setMessage("Player's number of bids cannot be more than the number of current round.")
+                        .setTitle(getString(R.string.rule_violation))
+                        .setPositiveButton("Okay") { _, _ -> }
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                    break
+                }
+            }
+            if(!error && globalAdapter.obtainBids().sum() == viewmodel.currentRound.value){
                 error = true
                 builder
                     .setMessage("Total number of bids cannot be equal to the number of current round.")
@@ -92,30 +118,6 @@ class BidsOutcomesFragment : Fragment() {
                     .setPositiveButton("Okay") { _, _ -> }
                 val dialog: AlertDialog = builder.create()
                 dialog.show()
-            }
-            else{
-                for(i in 0 until viewmodel.playerCount){
-                    if(globalAdapter.obtainBids()[i] > viewmodel.currentRound.value!!){
-                        error = true
-                        builder
-                            .setMessage("Player's number of bids cannot be more than the number of current round.")
-                            .setTitle(getString(R.string.rule_violation))
-                            .setPositiveButton("Okay") { _, _ -> }
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
-                        break
-                    }
-                    if(globalAdapter.obtainBids()[i] == -1){
-                        error = true
-                        builder
-                            .setMessage("Player's number of bids cannot be null.")
-                            .setTitle(getString(R.string.rule_violation))
-                            .setPositiveButton("Okay") { _, _ -> }
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
-                        break
-                    }
-                }
             }
 
             if(!error){
@@ -132,7 +134,29 @@ class BidsOutcomesFragment : Fragment() {
             var error = false
             val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
 
-            if(globalAdapter.obtainWins().sum() != viewmodel.currentRound.value){
+            for(i in 0 until viewmodel.playerCount){
+                if(globalAdapter.obtainWins()[i] == -1){
+                    error = true
+                    builder
+                        .setMessage("Player's number of wins cannot be null.")
+                        .setTitle(getString(R.string.rule_violation))
+                        .setPositiveButton("Okay") { _, _ -> }
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                    break
+                }
+                if(globalAdapter.obtainWins()[i] > viewmodel.currentRound.value!!){
+                    error = true
+                    builder
+                        .setMessage("Player's number of wins cannot be more than the number of current round.")
+                        .setTitle(getString(R.string.rule_violation))
+                        .setPositiveButton("Okay") { _, _ -> }
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                    break
+                }
+            }
+            if(!error && globalAdapter.obtainWins().sum() != viewmodel.currentRound.value){
                 error = true
                 builder
                     .setMessage("Number of wins must be equal to the number of current round.")
@@ -140,30 +164,6 @@ class BidsOutcomesFragment : Fragment() {
                     .setPositiveButton("Okay") { _, _ -> }
                 val dialog: AlertDialog = builder.create()
                 dialog.show()
-            }
-            else{
-                for(i in 0 until viewmodel.playerCount){
-                    if(globalAdapter.obtainWins()[i] > viewmodel.currentRound.value!!){
-                        error = true
-                        builder
-                            .setMessage("Player's number of wins cannot be more than the number of current round.")
-                            .setTitle(getString(R.string.rule_violation))
-                            .setPositiveButton("Okay") { _, _ -> }
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
-                        break
-                    }
-                    if(globalAdapter.obtainWins()[i] == -1){
-                        error = true
-                        builder
-                            .setMessage("Player's number of wins cannot be null.")
-                            .setTitle(getString(R.string.rule_violation))
-                            .setPositiveButton("Okay") { _, _ -> }
-                        val dialog: AlertDialog = builder.create()
-                        dialog.show()
-                        break
-                    }
-                }
             }
 
             if(!error){

@@ -1,4 +1,4 @@
-package com.example.germanbridgescoreboard
+package com.germanbridgescoreboard
 
 import androidx.room.Dao
 import androidx.room.Database

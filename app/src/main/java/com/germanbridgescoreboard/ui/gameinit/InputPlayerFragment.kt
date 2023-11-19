@@ -1,4 +1,4 @@
-package com.example.germanbridgescoreboard.ui.gameinit
+package com.germanbridgescoreboard.ui.gameinit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.germanbridgescoreboard.MainViewModel
-import com.example.germanbridgescoreboard.R
+import com.germanbridgescoreboard.MainViewModel
+import com.germanbridgescoreboard.R
 
 
 class InputPlayerFragment : Fragment(){

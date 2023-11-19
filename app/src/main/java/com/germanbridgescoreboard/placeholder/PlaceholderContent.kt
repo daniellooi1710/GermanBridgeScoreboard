@@ -1,4 +1,4 @@
-package com.example.germanbridgescoreboard.placeholder
+package com.germanbridgescoreboard.placeholder
 
 import java.util.ArrayList
 import java.util.HashMap

@@ -1,14 +1,12 @@
-package com.example.germanbridgescoreboard.ui.bidoutcome
+package com.germanbridgescoreboard.ui.bidoutcome
 
 import android.text.Editable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import com.example.germanbridgescoreboard.MainViewModel
-import com.example.germanbridgescoreboard.R
-import com.example.germanbridgescoreboard.databinding.FragmentBidWinBinding
+import com.germanbridgescoreboard.MainViewModel
+import com.germanbridgescoreboard.databinding.FragmentBidWinBinding
 
 class BidsOutcomesRecyclerViewAdapter(private val numPlayers: Int, private val names: Array<String>, private val gameProcess : MainViewModel.GAMEPROCESS, private val currentRoundBids : Array<Int>): RecyclerView.Adapter<BidsOutcomesRecyclerViewAdapter.ViewHolder>() {
 
