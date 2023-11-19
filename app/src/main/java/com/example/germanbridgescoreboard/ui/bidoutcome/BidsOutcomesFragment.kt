@@ -38,7 +38,7 @@ class BidsOutcomesFragment : Fragment() {
                 this.isNestedScrollingEnabled = false
                 layoutManager = LinearLayoutManager(context)
 
-                val currentRoundBids = Array<Int>(viewmodel.playerCount){0}
+                val currentRoundBids = Array(viewmodel.playerCount){0}
                 for (i in 0 until viewmodel.playerCount) currentRoundBids[i] = viewmodel.playerBids[i][viewmodel.currentRound.value!! - 1]
 
                 adapter = BidsOutcomesRecyclerViewAdapter(

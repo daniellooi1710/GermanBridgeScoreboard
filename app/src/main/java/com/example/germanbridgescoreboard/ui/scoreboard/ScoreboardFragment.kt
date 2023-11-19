@@ -31,12 +31,13 @@ class ScoreboardFragment : Fragment() {
         val root: View = binding.root
 
         val tableView = root.findViewById<TableView>(R.id.tableView)
-        val adapter = ScoreboardTableViewAdapter(viewmodel.total)
-
-        tableView.setAdapter(adapter)
 
         if(viewmodel.gameProcess.value != MainViewModel.GAMEPROCESS.INIT){
+            val adapter = ScoreboardTableViewAdapter(viewmodel.total)
+            tableView.setAdapter(adapter)
+
             root.findViewById<TextView>(R.id.textView4).visibility = View.GONE
+
             val ch = ArrayList<Int>()
             for(i in 1 .. viewmodel.rounds) ch.add(i)
             val ch2 = ch as MutableList<Int>
@@ -45,15 +46,8 @@ class ScoreboardFragment : Fragment() {
             for(i in 0 until viewmodel.players.size){
                 rh2[i] = rh[i]
             }
-            val cells = viewmodel.playerScores
             val cellsT = viewmodel.playerScoresT
-            val cells2 = MutableList(viewmodel.players.size){MutableList(viewmodel.rounds){0} }
             val cells2T = MutableList(viewmodel.rounds){MutableList(viewmodel.players.size){0} }
-            for (players in 0 until cells2.size){
-                for (rounds in 0 until cells2[players].size){
-                    cells2[players][rounds] = cells[players][rounds]
-                }
-            }
             for (rounds in 0 until cells2T.size){
                 for (players in 0 until cells2T[rounds].size){
                     cells2T[rounds][players] = cellsT[rounds][players]

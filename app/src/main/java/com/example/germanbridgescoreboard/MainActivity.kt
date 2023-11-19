@@ -21,14 +21,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewmodel : MainViewModel
     private lateinit var sharedPref: SharedPreferences
-    private var gameOngoing = false
     private lateinit var db : PlayerDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewmodel = ViewModelProvider(this)[MainViewModel::class.java]
         sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        gameOngoing = sharedPref.getBoolean("game_ongoing", false)
+        val gameOngoing = sharedPref.getBoolean("game_ongoing", false)
 
         db = Room.databaseBuilder(
             applicationContext,
@@ -76,6 +75,9 @@ class MainActivity : AppCompatActivity() {
             catch(e: Exception){
                 viewmodel.newGame()
             }
+        }
+        else{
+            viewmodel.gameProcess.value = MainViewModel.GAMEPROCESS.INIT
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
