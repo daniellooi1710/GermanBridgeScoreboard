@@ -26,6 +26,6 @@
     <string name="database_name">german_bridge_scoreboard</string>
     <string name="no_game_to_show">No game to show :D</string>
     <string name="game_ended">Game has ended</string>
-    <string name="view_ranking">View Game Ranking</string>
+    <string name="view_ranking">View Game Rankings</string>
     <string name="score">Score</string>
 </resources>

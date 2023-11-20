@@ -1,5 +1,6 @@
 package com.germanbridgescoreboard.ui.scoreboard
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ class ScoreboardFragment : Fragment() {
         val root: View = binding.root
 
         val btRanking = root.findViewById<Button>(R.id.buttonViewRanking)
+        btRanking.setBackgroundColor(Color.rgb(69, 50, 175))
         btRanking.visibility = View.VISIBLE
 
         val tableView = root.findViewById<TableView>(R.id.tableView)

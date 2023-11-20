@@ -1,5 +1,6 @@
 package com.germanbridgescoreboard.ui.home
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater

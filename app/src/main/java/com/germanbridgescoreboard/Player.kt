@@ -42,7 +42,7 @@ data class PlayerRound(
     val rounds: List<Round>
 )
 
-@Database(entities = [Player::class, Round::class], version = 1)
+@Database(entities = [Player::class, Round::class], version = 1, exportSchema = true)
 abstract class PlayerDatabase : RoomDatabase() {
     abstract fun playerRoundDao(): PlayerRoundDao
 }
