@@ -10,3 +10,7 @@ v1.1.2 - Code refactor
 v1.1.3 - Emergency bug fix
 v1.1.4 - UI Enhancements
 v1.1.5 - Minor bug fixes, code refactor
+v1.1.6 - UI changes
+v1.1.7 - Bug fixes
+v1.1.8 - Fixed table not working as intended
+v1.1.9 - UI changes
