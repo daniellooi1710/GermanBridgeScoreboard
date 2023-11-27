@@ -63,7 +63,7 @@ class MainViewModel : ViewModel() {
                 playerScoresT[currentRoundIndex][i] = 10 + playerBids[i][currentRoundIndex].toFloat().pow(2).toInt()
             }
             else{
-                playerScoresT[currentRoundIndex][i] = -((playerWins[i][currentRoundIndex] - playerBids[i][currentRoundIndex]).absoluteValue)
+                playerScoresT[currentRoundIndex][i] = -((playerWins[i][currentRoundIndex] - playerBids[i][currentRoundIndex]).toFloat().pow(2).toInt())
             }
             total[i] += playerScoresT[currentRoundIndex][i]
         }
