@@ -49,21 +49,21 @@ abstract class PlayerDatabase : RoomDatabase() {
 
 @Dao
 interface PlayerRoundDao {
-    @Query("SELECT * FROM player")
+    @Query("SELECT * FROM Player")
     fun getPlayers(): List<Player>
 
-    @Query("SELECT * FROM round WHERE (pid = :pid AND round = :round)")
+    @Query("SELECT * FROM Round WHERE (pid = :pid AND round = :round)")
     fun getPlayerRound(pid: Int, round: Int): List<Round>
 
-    @Query("DELETE FROM player")
+    @Query("DELETE FROM Player")
     fun clearPlayerTable()
 
-    @Query("DELETE FROM round")
+    @Query("DELETE FROM Round")
     fun clearRoundTable()
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addPlayer(player: Player)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addPlayerRound(round: Round)
 }

@@ -8,7 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.germanbridgescoreboard.R
 
-class RankingRecyclerViewAdapter(val context: Context, val playerCount: Int, val players: Array<String>, val scores: Array<Int>): RecyclerView.Adapter<RankingRecyclerViewAdapter.ViewHolder>() {
+class RankingRecyclerViewAdapter(val context: Context,
+                                 val playerCount: Int,
+                                 val players: Array<String>,
+                                 val scores: Array<Int>)
+    : RecyclerView.Adapter<RankingRecyclerViewAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var name = itemView.findViewById<TextView>(R.id.textView8)

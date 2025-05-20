@@ -12,10 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.germanbridgescoreboard.MainViewModel
 import com.germanbridgescoreboard.R
+import com.germanbridgescoreboard.databinding.FragmentBidsOutcomesBinding
+import com.germanbridgescoreboard.databinding.FragmentGameInitBinding
+import com.germanbridgescoreboard.databinding.FragmentInputBinding
 
 
 class InputPlayerFragment : Fragment(){
     private val viewmodel: MainViewModel by activityViewModels()
+    private var _binding: FragmentGameInitBinding? = null
+
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,19 +29,18 @@ class InputPlayerFragment : Fragment(){
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_game_init, container, false)
+        _binding = FragmentGameInitBinding.inflate(layoutInflater)
+        val view = binding.root
 
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                this.setItemViewCacheSize(12)
-                layoutManager = LinearLayoutManager(context)
-                adapter = InputPlayerRecyclerViewAdapter(viewmodel.playerCount)
-            }
+        with(view) {
+            this.setItemViewCacheSize(12)
+            layoutManager = LinearLayoutManager(context)
+            adapter = InputPlayerRecyclerViewAdapter(viewmodel.playerCount)
         }
         return view
     }
@@ -44,4 +49,10 @@ class InputPlayerFragment : Fragment(){
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar, menu)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

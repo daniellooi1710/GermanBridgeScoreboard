@@ -28,4 +28,5 @@
     <string name="game_ended">Game has ended</string>
     <string name="view_ranking">View Game Rankings</string>
     <string name="score">Score</string>
+    <string name="back">BACK</string>
 </resources>

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,13 +14,15 @@ import androidx.navigation.findNavController
 import com.germanbridgescoreboard.MainViewModel
 import com.germanbridgescoreboard.R
 import com.germanbridgescoreboard.databinding.FragmentHomeBinding
+import com.google.android.material.snackbar.Snackbar
+import java.lang.IllegalStateException
 
 class HomeFragment : Fragment() {
     private val viewmodel: MainViewModel by activityViewModels()
     private var _binding: FragmentHomeBinding? = null
 
     // This property is only valid between onCreateView and onDestroyView.
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw IllegalStateException("View Binding is accessed after onDestroyView")
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -68,14 +69,20 @@ class HomeFragment : Fragment() {
         binding.buttonMinus.setOnClickListener{
             if (playerNumDisplay.text.toString().toInt() > 2) viewmodel.minus()
             else{
-                Toast.makeText(root.context, "Minimum number of players is 2", Toast.LENGTH_LONG).show()
+                Snackbar.make(binding.root, "Minimum number of players is 2", Snackbar.LENGTH_SHORT)
+                    .setAnchorView(R.id.nav_view)
+                    .setAction("OK") { }
+                    .show()
             }
         }
 
         binding.buttonPlus.setOnClickListener{
             if (playerNumDisplay.text.toString().toInt() < 12) viewmodel.add()
             else{
-                Toast.makeText(root.context, "Maximum number of players is 12", Toast.LENGTH_LONG).show()
+                Snackbar.make(binding.root, "Maximum number of players is 12", Snackbar.LENGTH_SHORT)
+                    .setAnchorView(R.id.nav_view)
+                    .setAction("OK") { }
+                    .show()
             }
         }
 

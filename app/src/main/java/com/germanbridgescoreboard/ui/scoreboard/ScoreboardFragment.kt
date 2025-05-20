@@ -34,17 +34,17 @@ class ScoreboardFragment : Fragment() {
         _binding = FragmentScoreboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val btRanking = root.findViewById<Button>(R.id.buttonViewRanking)
+        val btRanking = binding.buttonViewRanking
         btRanking.setBackgroundColor(Color.rgb(69, 50, 175))
         btRanking.visibility = View.VISIBLE
 
-        val tableView = root.findViewById<TableView>(R.id.tableView)
+        val tableView = binding.tableView
 
         if(viewmodel.gameProcess.value != MainViewModel.GAMEPROCESS.INIT){
             val adapter = ScoreboardTableViewAdapter(viewmodel.total)
             tableView.setAdapter(adapter)
 
-            root.findViewById<TextView>(R.id.textView4).visibility = View.GONE
+            binding.textView4.visibility = View.GONE
 
             val ch = ArrayList<Int>()
             for(i in 1 .. viewmodel.rounds) ch.add(i)
@@ -65,7 +65,7 @@ class ScoreboardFragment : Fragment() {
         }
         else {
             btRanking.visibility = View.GONE
-            root.findViewById<TextView>(R.id.textView4).visibility = View.VISIBLE
+            binding.textView4.visibility = View.VISIBLE
         }
 
         btRanking.setOnClickListener {

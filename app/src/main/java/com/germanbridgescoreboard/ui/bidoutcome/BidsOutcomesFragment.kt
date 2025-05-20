@@ -6,25 +6,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.shawnlin.numberpicker.NumberPicker
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.germanbridgescoreboard.MainActivity
 import com.germanbridgescoreboard.MainViewModel
 import com.germanbridgescoreboard.R
 import com.germanbridgescoreboard.databinding.FragmentBidsOutcomesBinding
 import com.germanbridgescoreboard.ui.scoreboard.RankingRecyclerViewAdapter
-import com.germanbridgescoreboard.ui.scoreboard.ScoreboardFragment
-import com.google.android.material.textfield.TextInputEditText
 
 class BidsOutcomesFragment : Fragment() {
-    private val viewmodel: MainViewModel by activityViewModels()
-    private var _binding: FragmentBidsOutcomesBinding? = null
+    private val viewmodel : MainViewModel by activityViewModels()
+    private var _binding : FragmentBidsOutcomesBinding? = null
     private lateinit var globalAdapter : BidsOutcomesRecyclerViewAdapter
+    private lateinit var mainAct : MainActivity
 
     private val binding get() = _binding!!
+
+    private fun showErrorDialog(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.rule_violation))
+            .setMessage(message)
+            .setPositiveButton("Okay") { _, _ -> }
+            .create()
+            .show()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +43,9 @@ class BidsOutcomesFragment : Fragment() {
         _binding = FragmentBidsOutcomesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val view2 = root.findViewById<RecyclerView>(R.id.bid_win_table)
+        val view2 = binding.bidWinTable
+
+        mainAct = activity as MainActivity
 
         if(viewmodel.playerCount > 0) {
             val nameArray = viewmodel.players
@@ -44,13 +55,15 @@ class BidsOutcomesFragment : Fragment() {
                 layoutManager = LinearLayoutManager(context)
 
                 val currentRoundBids = Array(viewmodel.playerCount){0}
+                val currentRound = viewmodel.currentRound
                 for (i in 0 until viewmodel.playerCount) currentRoundBids[i] = viewmodel.playerBids[i][viewmodel.currentRound.value!! - 1]
 
                 adapter = BidsOutcomesRecyclerViewAdapter(
                     viewmodel.playerCount,
                     nameArray,
                     viewmodel.gameProcess.value!!,
-                    currentRoundBids
+                    currentRoundBids,
+                    currentRound
                 )
                 globalAdapter = adapter as BidsOutcomesRecyclerViewAdapter
             }
@@ -67,127 +80,100 @@ class BidsOutcomesFragment : Fragment() {
                     binding.textViewGameProcess.setTextColor(Color.RED)
                     binding.buttonNext.visibility = View.GONE
                     binding.buttonDone.visibility = View.GONE
+                    binding.buttonBack.visibility = View.GONE
                 }
                 MainViewModel.GAMEPROCESS.BIDDING -> {
                     binding.textViewGameProcess.text = getString(R.string.bidding)
                     binding.textViewGameProcess.setTextColor(Color.rgb(200, 88, 5))
                     binding.buttonDone.visibility = View.GONE
                     binding.buttonNext.visibility = View.VISIBLE
+                    binding.buttonBack.visibility = View.GONE
                 }
                 MainViewModel.GAMEPROCESS.PLAYING -> {
                     binding.textViewGameProcess.text = getString(R.string.playing)
                     binding.textViewGameProcess.setTextColor(Color.rgb(5, 100, 5))
                     binding.buttonNext.visibility = View.GONE
                     binding.buttonDone.visibility = View.VISIBLE
+                    binding.buttonBack.visibility = View.VISIBLE
                 }
                 MainViewModel.GAMEPROCESS.ENDED -> {
                     binding.textViewGameProcess.text = getString(R.string.game_ended)
                     binding.textViewGameProcess.setTextColor(Color.rgb(25, 1, 100))
                     binding.buttonNext.visibility = View.GONE
                     binding.buttonDone.visibility = View.GONE
+                    binding.buttonBack.visibility = View.GONE
                 }
             }
         }
 
         binding.buttonNext.setOnClickListener{
             var error = false
-            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-            for(i in 0 until viewmodel.playerCount){
-                if(globalAdapter.obtainBids()[i] == -1){
-                    error = true
-                    builder
-                        .setMessage("Player's number of bids cannot be null.")
-                        .setTitle(getString(R.string.rule_violation))
-                        .setPositiveButton("Okay") { _, _ -> }
-                    val dialog: AlertDialog = builder.create()
-                    dialog.show()
-                    break
-                }
-                if(globalAdapter.obtainBids()[i] > viewmodel.currentRound.value!!){
-                    error = true
-                    builder
-                        .setMessage("Player's number of bids cannot be more than the number of current round.")
-                        .setTitle(getString(R.string.rule_violation))
-                        .setPositiveButton("Okay") { _, _ -> }
-                    val dialog: AlertDialog = builder.create()
-                    dialog.show()
-                    break
-                }
-            }
-            if(!error && globalAdapter.obtainBids().sum() == viewmodel.currentRound.value){
+            if(globalAdapter.obtainBids().sum() == viewmodel.currentRound.value){
                 error = true
-                builder
-                    .setMessage("Total number of bids cannot be equal to the number of current round.")
-                    .setTitle(getString(R.string.rule_violation))
-                    .setPositiveButton("Okay") { _, _ -> }
-                val dialog: AlertDialog = builder.create()
-                dialog.show()
+                showErrorDialog("Total number of bids cannot be equal to the number of current round.")
             }
 
             if(!error){
-                for(i in 0 until viewmodel.playerCount){
-                    viewmodel.playerBids[i][viewmodel.currentRound.value!! - 1] = globalAdapter.obtainBids()[i]
-                    view2.findViewWithTag<TextInputEditText>("b$i").isEnabled = false
-                    view2.findViewWithTag<TextInputEditText>("w$i").isEnabled = true
+                for(i in 0 until viewmodel.playerCount) {
+                    viewmodel.playerBids[i][viewmodel.currentRound.value!! - 1] =
+                        globalAdapter.obtainBids()[i]
+                    view2.findViewWithTag<NumberPicker>("b$i").isEnabled = false
+                    view2.findViewWithTag<NumberPicker>("b$i").selectedTextColor = Color.GRAY
+                    view2.findViewWithTag<NumberPicker>("w$i").isEnabled = true
+                    view2.findViewWithTag<NumberPicker>("w$i").selectedTextColor = Color.BLACK
                 }
+                mainAct.updateDatabase()
                 viewmodel.playing()
             }
         }
 
         binding.buttonDone.setOnClickListener{
             var error = false
-            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-
-            for(i in 0 until viewmodel.playerCount){
-                if(globalAdapter.obtainWins()[i] == -1){
-                    error = true
-                    builder
-                        .setMessage("Player's number of wins cannot be null.")
-                        .setTitle(getString(R.string.rule_violation))
-                        .setPositiveButton("Okay") { _, _ -> }
-                    val dialog: AlertDialog = builder.create()
-                    dialog.show()
-                    break
-                }
-                if(globalAdapter.obtainWins()[i] > viewmodel.currentRound.value!!){
-                    error = true
-                    builder
-                        .setMessage("Player's number of wins cannot be more than the number of current round.")
-                        .setTitle(getString(R.string.rule_violation))
-                        .setPositiveButton("Okay") { _, _ -> }
-                    val dialog: AlertDialog = builder.create()
-                    dialog.show()
-                    break
-                }
-            }
-            if(!error && globalAdapter.obtainWins().sum() != viewmodel.currentRound.value){
+            if(globalAdapter.obtainWins().sum() != viewmodel.currentRound.value){
                 error = true
-                builder
-                    .setMessage("Number of wins must be equal to the number of current round.")
-                    .setTitle(getString(R.string.rule_violation))
-                    .setPositiveButton("Okay") { _, _ -> }
-                val dialog: AlertDialog = builder.create()
-                dialog.show()
+                showErrorDialog("Number of wins must be equal to the number of current round.")
             }
 
             if(!error){
                 for(i in 0 until viewmodel.playerCount){
                     viewmodel.playerWins[i][viewmodel.currentRound.value!! - 1] = globalAdapter.obtainWins()[i]
-                    view2.findViewWithTag<TextInputEditText>("b$i").isEnabled = true
-                    view2.findViewWithTag<TextInputEditText>("b$i").setText("")
-                    view2.findViewWithTag<TextInputEditText>("w$i").setText("")
-                    view2.findViewWithTag<TextInputEditText>("w$i").isEnabled = false
+                    view2.findViewWithTag<NumberPicker>("b$i").isEnabled = true
+                    view2.findViewWithTag<NumberPicker>("b$i").selectedTextColor = Color.BLACK
+                    view2.findViewWithTag<NumberPicker>("b$i").value = 0
+                    view2.findViewWithTag<NumberPicker>("w$i").isEnabled = false
+                    view2.findViewWithTag<NumberPicker>("w$i").selectedTextColor = Color.GRAY
+                    view2.findViewWithTag<NumberPicker>("w$i").value = 0
                 }
                 viewmodel.calcScores()
                 viewmodel.bidding()
                 globalAdapter.resetArrays()
-                if(viewmodel.currentRound.value != viewmodel.rounds) viewmodel.nextRound()
+                mainAct.updateDatabase()
+                if(viewmodel.currentRound.value != viewmodel.rounds) {
+                    viewmodel.nextRound()
+                    for(i in 0 until viewmodel.playerCount){
+                        view2.findViewWithTag<NumberPicker>("b$i").maxValue = viewmodel.currentRound.value!!
+                        view2.findViewWithTag<NumberPicker>("w$i").maxValue = viewmodel.currentRound.value!!
+                    }
+                }
                 else{
                     viewmodel.endGame()
                     showRankings()
                 }
             }
         }
+
+        binding.buttonBack.setOnClickListener{
+            viewmodel.bidding()
+            for(i in 0 until viewmodel.playerCount){
+                viewmodel.playerWins[i][viewmodel.currentRound.value!! - 1] = globalAdapter.obtainWins()[i]
+                view2.findViewWithTag<NumberPicker>("b$i").isEnabled = true
+                view2.findViewWithTag<NumberPicker>("b$i").selectedTextColor = Color.BLACK
+                view2.findViewWithTag<NumberPicker>("w$i").value = 0
+                view2.findViewWithTag<NumberPicker>("w$i").isEnabled = false
+                view2.findViewWithTag<NumberPicker>("w$i").selectedTextColor = Color.GRAY
+            }
+        }
+
         return root
     }
 
@@ -197,8 +183,8 @@ class BidsOutcomesFragment : Fragment() {
     }
 
     fun showRankings(){
-        var pNameR = viewmodel.players.clone()
-        var pTotalR = viewmodel.total.clone()
+        val pNameR = viewmodel.players.clone()
+        val pTotalR = viewmodel.total.clone()
 
         for(i in 0 until (viewmodel.playerCount - 1)) {
             var swapped = false

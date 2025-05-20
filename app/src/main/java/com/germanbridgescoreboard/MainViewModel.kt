@@ -2,7 +2,6 @@ package com.germanbridgescoreboard
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.math.pow
 
@@ -20,16 +19,33 @@ class MainViewModel : ViewModel() {
     var rounds: Int = 0
     var currentRound = MutableLiveData(0)
 
-    var playerNum : MutableLiveData<Int> = if(playerCount == 0) MutableLiveData<Int>(2) else MutableLiveData<Int>(playerCount)
+    var playerNum : MutableLiveData<Int> = MutableLiveData<Int>(2)
+
+    // TODO: Implement class for Player
+    inner class Player(val name: String){
+        var bids : Array<Int> = Array(rounds){0}
+        var wins : Array<Int> = Array(rounds){0}
+        var scores : Array<Int> = Array(rounds){0}
+    }
 
     var name: String = ""
     lateinit var total: Array<Int>
 
     lateinit var players : Array<String>
+    // playerBids[i][r]: bids of player i in round r
     lateinit var playerBids : Array<Array<Int>>
+    // playerWins[i][r]: wins of player i in round r
     lateinit var playerWins : Array<Array<Int>>
+    // score matrix transposed for natural looping over rounds
+    // playerScoresT[r][i]: score of player i in round r
+    // we access the scores within each round rather than each player, efficient and intuitive
     lateinit var playerScoresT : Array<Array<Int>>
 
+    /**
+     * Initialize the game.
+     *
+     * Inserts all names of players, calculate number of rounds, and initializes score arrays.
+     */
     fun initGame(){
         playerCount = playerNum.value!!
         rounds = if(52 % playerCount != 0) floor(52.0/playerCount).toInt() else (52/playerCount - 1)
@@ -70,15 +86,15 @@ class MainViewModel : ViewModel() {
     }
 
     fun add(){
-        playerNum.value = playerNum.value?.plus(1)
+        playerNum.postValue((playerNum.value ?: 2) + 1)
     }
 
     fun minus(){
-        playerNum.value = playerNum.value?.minus(1)
+        playerNum.postValue((playerNum.value ?: 2) - 1)
     }
 
     fun nextRound(){
-        currentRound.value = currentRound.value?.plus(1)
+        currentRound.postValue((currentRound.value ?: 0) + 1)
     }
 
     fun bidding(){

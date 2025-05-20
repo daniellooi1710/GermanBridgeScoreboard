@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -16,8 +15,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.room.Room
 import com.germanbridgescoreboard.databinding.ActivityMainBinding
 import com.germanbridgescoreboard.ui.gameinit.InputPlayerRecyclerViewAdapter
-import com.germanbridgescoreboard.ui.scoreboard.ScoreboardFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -27,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Check if activity is already running
+        // if current activity is not root of task, terminate activity
         if (!isTaskRoot) {
             val intent = intent
             val intentAction = intent.action
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             val currentRound = sharedPref.getInt("current_round", 0)
             val gamePlaying = sharedPref.getBoolean("game_playing", false)
             val gameEnded = sharedPref.getBoolean("game_ended", false)
-            var gameprocess : MainViewModel.GAMEPROCESS
+            val gameprocess : MainViewModel.GAMEPROCESS
 
             viewmodel.playerNum.value = playerCount
             viewmodel.initGame()
@@ -133,10 +134,13 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.toolbarButton -> {
                 var isNull = false
-                for(i in 0..<(viewmodel.playerCount)){
+                for(i in 0 until viewmodel.playerCount){
                     viewmodel.players[i] = adapter.obtainName()[i]
                     if(viewmodel.players[i] == ""){
-                        Toast.makeText(this.applicationContext, "Player names cannot be null", Toast.LENGTH_LONG).show()
+                        Snackbar.make(findViewById(android.R.id.content), "Player names cannot be empty", Snackbar.LENGTH_LONG)
+                            .setAnchorView(R.id.nav_view)
+                            .setAction("OK") {  }
+                                .show()
                         isNull = true
                         break
                     }
@@ -155,7 +159,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        updateDatabase()
+    }
+
+    // Persistent Saving
+    fun updateDatabase(){
         if(viewmodel.gameProcess.value != MainViewModel.GAMEPROCESS.INIT){
+            // if game is ongoing, save info
             with (sharedPref.edit()){
                 putInt("player_count", viewmodel.playerCount)
                 putInt("current_round", viewmodel.currentRound.value!!)
@@ -182,6 +192,7 @@ class MainActivity : AppCompatActivity() {
 
             val playerDao = db.playerRoundDao()
 
+            // save to database
             for(i in 0 until viewmodel.playerCount){
                 val name = viewmodel.players[i]
                 val total = viewmodel.total[i]
@@ -201,11 +212,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else{
+            // no saving if no game is recorded
             with (sharedPref.edit()){
                 putBoolean("game_ongoing", false)
                 apply()
             }
         }
     }
-
 }
