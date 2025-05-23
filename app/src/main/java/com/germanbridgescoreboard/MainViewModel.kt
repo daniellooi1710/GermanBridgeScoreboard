@@ -1,6 +1,7 @@
 package com.germanbridgescoreboard
 
 import android.content.SharedPreferences
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -35,6 +36,17 @@ class MainViewModel : ViewModel() {
 
     val playerCount: Int get() = players.size
     var rounds: Int = 0
+
+    private val _numPlayers = mutableStateOf(2)
+    val numPlayers: State<Int> = _numPlayers
+
+    fun increasePlayers() {
+        _numPlayers.value = (_numPlayers.value + 1).coerceAtMost(12)
+    }
+
+    fun decreasePlayers() {
+        _numPlayers.value = (_numPlayers.value - 1).coerceAtLeast(2)
+    }
 
     /**
      * Initialize the game.

@@ -20,7 +20,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,7 +47,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val gameProcess = viewModel.gameProcess
-    var numberOfPlayers by remember { mutableIntStateOf(2) }
+    val numberOfPlayers by viewModel.numPlayers
     val coroutineScope = rememberCoroutineScope()
     var openAlertDialog by remember { mutableStateOf(false)}
 
@@ -108,10 +107,11 @@ fun HomeScreen(
                         }
                     }
                     else{
-                        numberOfPlayers = (numberOfPlayers - 1).coerceAtLeast(2)
+                        viewModel.decreasePlayers()
                     }
                 },
-                shape = CircleShape
+                shape = CircleShape,
+                enabled = gameProcess == MainViewModel.GAMEPROCESS.INIT
             ){
                 Text(text = "-",
                     fontSize = 36.sp
@@ -140,10 +140,11 @@ fun HomeScreen(
                         }
                     }
                     else{
-                        numberOfPlayers = (numberOfPlayers + 1).coerceAtMost(12)
+                        viewModel.increasePlayers()
                     }
                 },
-                shape = CircleShape
+                shape = CircleShape,
+                enabled = gameProcess == MainViewModel.GAMEPROCESS.INIT
             ){
                 Text(
                     text = "+",

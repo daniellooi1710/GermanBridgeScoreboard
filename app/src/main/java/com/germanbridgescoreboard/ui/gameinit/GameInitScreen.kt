@@ -1,6 +1,7 @@
 package com.germanbridgescoreboard.ui.gameinit
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -86,12 +88,18 @@ fun GameInitScreen(
     ){
         stickyHeader {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).height(36.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(vertical = 8.dp)
             ) {
                 Text(
                     text = "Input Player Names",
                     fontSize = 24.sp,
-                    modifier = Modifier.padding(start = 12.dp).align(Alignment.CenterVertically)
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .align(Alignment.CenterVertically)
                 )
 
                 Spacer(Modifier.weight(1f))
