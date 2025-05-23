@@ -1,6 +1,5 @@
 package com.germanbridgescoreboard.ui.utils
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
@@ -24,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -37,7 +35,6 @@ import com.germanbridgescoreboard.ui.bidoutcome.BidsOutcomesScreen
 import com.germanbridgescoreboard.ui.gameinit.GameInitScreen
 import com.germanbridgescoreboard.ui.home.HomeScreen
 import com.germanbridgescoreboard.ui.scoreboard.ScoreboardScreen
-import com.germanbridgescoreboard.ui.theme.AppTheme
 
 @Composable
 fun AppNavHost(
@@ -95,8 +92,8 @@ fun NavigationBarMain(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             TopAppBar(
                 title = { Text(text = title) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             )
         },
@@ -127,15 +124,5 @@ fun NavigationBarMain(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             viewModel,
             snackbarHostState,
             Modifier.padding(contentPadding))
-    }
-}
-
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground=true)
-@Composable
-fun DefaultPreview() {
-    var viewModel = MainViewModel()
-    AppTheme{
-        NavigationBarMain(viewModel)
     }
 }

@@ -1,6 +1,5 @@
 package com.germanbridgescoreboard.ui.bidoutcome
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,11 +31,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.germanbridgescoreboard.MainViewModel
-import com.germanbridgescoreboard.ui.theme.AppTheme
 import com.germanbridgescoreboard.ui.theme.extendedColorScheme
 import kotlinx.coroutines.launch
 
@@ -223,7 +219,7 @@ fun BidsOutcomesScreen(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.secondary)
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
                     .padding(vertical = 8.dp)
             ) {
                 // Left text - round and state
@@ -234,7 +230,7 @@ fun BidsOutcomesScreen(
                         text = "Round $currentRound",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier.padding(horizontal = 12.dp)
                     )
                     Text(
@@ -382,16 +378,5 @@ fun BidsOutcomesScreen(
                 onBidChange = { localBids[i] = it },
                 onWinChange = { localWins[i] = it })
         }
-    }
-}
-
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true)
-@Composable
-fun BidsOutcomesScreenPreview() {
-    val viewModel = MainViewModel()
-    val snackbarHostState = remember { SnackbarHostState() }
-    AppTheme{
-        BidsOutcomesScreen(viewModel, snackbarHostState)
     }
 }

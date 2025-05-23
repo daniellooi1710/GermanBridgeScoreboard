@@ -16,7 +16,7 @@ android {
         minSdk = 29
         targetSdk = 35
         versionCode = 1
-        versionName = "1.4.1"
+        versionName = "1.4.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
@@ -67,11 +67,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.9.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.recyclerview:recyclerview:1.4.0")
-    implementation("androidx.recyclerview:recyclerview:1.1.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("com.github.evrencoskun:TableView:v0.8.9.4")
-    implementation("io.github.ShawnLin013:number-picker:2.4.13")
 
     val room_version = "2.7.1"
     implementation("androidx.room:room-runtime:$room_version")
@@ -103,5 +99,4 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0")
     // Optional - Integration with LiveData
     implementation("androidx.compose.runtime:runtime-livedata")
-    //implementation("com.chargemap.compose:numberpicker:1.0.3")
 }

@@ -1,6 +1,5 @@
 package com.germanbridgescoreboard.ui.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,15 +31,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.rememberNavController
 import com.germanbridgescoreboard.MainViewModel
 import com.germanbridgescoreboard.R
-import com.germanbridgescoreboard.ui.theme.AppTheme
 import com.germanbridgescoreboard.ui.theme.extendedColorScheme
 import kotlinx.coroutines.launch
 
@@ -228,17 +224,5 @@ fun HomeScreen(
             )
         }
 
-    }
-}
-
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview(){
-    val viewModel = MainViewModel()
-    val navController = rememberNavController()
-    val snackbarHostState = remember { SnackbarHostState() }
-    AppTheme{
-        HomeScreen(viewModel, navController, snackbarHostState)
     }
 }
