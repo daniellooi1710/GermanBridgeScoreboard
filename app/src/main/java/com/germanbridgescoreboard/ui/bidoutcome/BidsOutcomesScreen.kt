@@ -249,7 +249,7 @@ fun BidsOutcomesScreen(
                             }
                         },
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier.padding(horizontal = 12.dp)
                     )
                 }
