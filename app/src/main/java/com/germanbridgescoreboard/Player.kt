@@ -1,5 +1,6 @@
 package com.germanbridgescoreboard
 
+import android.content.Context
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Embedded
@@ -10,17 +11,18 @@ import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Relation
+import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Entity
-data class Player (
+data class PlayerDB (
     @PrimaryKey val pid: Int,
     val name: String,
     val total: Int
 )
 
 @Entity(foreignKeys = [ForeignKey(
-    entity = Player::class,
+    entity = PlayerDB::class,
     parentColumns = ["pid"],
     childColumns = ["pid"],
     onDelete = ForeignKey.CASCADE
@@ -34,36 +36,55 @@ data class Round (
 )
 
 data class PlayerRound(
-    @Embedded val pid: Int,
+    @Embedded val player: PlayerDB,
     @Relation(
         parentColumn = "pid",
-        entityColumn = "round"
+        entityColumn = "pid"
     )
     val rounds: List<Round>
 )
 
-@Database(entities = [Player::class, Round::class], version = 1, exportSchema = true)
+@Database(entities = [PlayerDB::class, Round::class], version = 1, exportSchema = true)
 abstract class PlayerDatabase : RoomDatabase() {
     abstract fun playerRoundDao(): PlayerRoundDao
 }
 
+object DatabaseProvider {
+    @Volatile
+    private var INSTANCE: PlayerDatabase? = null
+
+    fun getDatabase(context: Context): PlayerDatabase {
+        return INSTANCE ?: synchronized(this) {
+            val instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        PlayerDatabase::class.java,
+                        "player_database"
+                    ).fallbackToDestructiveMigration(false)
+                .build()
+            INSTANCE = instance
+            instance
+        }
+    }
+}
+
+
 @Dao
 interface PlayerRoundDao {
-    @Query("SELECT * FROM Player")
-    fun getPlayers(): List<Player>
+    @Query("SELECT * FROM PlayerDB")
+    suspend fun getPlayers(): List<PlayerDB>
 
     @Query("SELECT * FROM Round WHERE (pid = :pid AND round = :round)")
-    fun getPlayerRound(pid: Int, round: Int): List<Round>
+    suspend fun getPlayerRound(pid: Int, round: Int): List<Round>
 
-    @Query("DELETE FROM Player")
-    fun clearPlayerTable()
+    @Query("DELETE FROM PlayerDB")
+    suspend fun clearPlayerTable()
 
     @Query("DELETE FROM Round")
-    fun clearRoundTable()
+    suspend fun clearRoundTable()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addPlayer(player: Player)
+    suspend fun addPlayer(player: PlayerDB)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addPlayerRound(round: Round)
+    suspend fun addPlayerRound(round: Round)
 }

@@ -29,4 +29,6 @@
     <string name="view_ranking">View Game Rankings</string>
     <string name="score">Score</string>
     <string name="back">BACK</string>
+    <string name="show_ranking">Show Rankings</string>
+    <string name="show_scoreboard">Show Scoreboard</string>
 </resources>
