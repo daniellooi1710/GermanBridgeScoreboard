@@ -101,7 +101,6 @@ fun HomeScreen(
         Row(verticalAlignment = Alignment.CenterVertically){
             FilledTonalButton(
                 onClick = {
-                    numberOfPlayers = (numberOfPlayers - 1).coerceAtLeast(2)
                     if(numberOfPlayers == 2){
                         coroutineScope.launch{
                             snackbarHostState.currentSnackbarData?.dismiss()
@@ -111,6 +110,9 @@ fun HomeScreen(
                                 duration = SnackbarDuration.Short
                             )
                         }
+                    }
+                    else{
+                        numberOfPlayers = (numberOfPlayers - 1).coerceAtLeast(2)
                     }
                 },
                 shape = CircleShape
@@ -131,7 +133,6 @@ fun HomeScreen(
 
             FilledTonalButton(
                 onClick = {
-                    numberOfPlayers = (numberOfPlayers + 1).coerceAtMost(12)
                     if(numberOfPlayers == 12){
                         coroutineScope.launch{
                             snackbarHostState.currentSnackbarData?.dismiss()
@@ -141,6 +142,9 @@ fun HomeScreen(
                                 duration = SnackbarDuration.Short
                             )
                         }
+                    }
+                    else{
+                        numberOfPlayers = (numberOfPlayers + 1).coerceAtMost(12)
                     }
                 },
                 shape = CircleShape
@@ -173,6 +177,8 @@ fun HomeScreen(
         ){
             Text(text = stringResource(R.string.start_game))
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
