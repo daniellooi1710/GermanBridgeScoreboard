@@ -3,6 +3,7 @@ package com.germanbridgescoreboard
 import android.content.SharedPreferences
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.edit
@@ -29,7 +30,7 @@ class MainViewModel : ViewModel() {
         ENDED
     }
 
-    var players: MutableList<Player> = mutableListOf()
+    var players = mutableStateListOf<Player>()
 
     var gameProcess by mutableStateOf(GAMEPROCESS.INIT)
     var currentRound by mutableStateOf(0)
@@ -48,6 +49,10 @@ class MainViewModel : ViewModel() {
         _numPlayers.value = (_numPlayers.value - 1).coerceAtLeast(2)
     }
 
+    fun setNumPlayers(num: Int) {
+        _numPlayers.value = num
+    }
+
     /**
      * Initialize the game.
      *
@@ -55,14 +60,16 @@ class MainViewModel : ViewModel() {
      */
     fun initGame(names: List<String>){
         rounds = floor(51f / names.size).toInt()
-        players = names.map{ name ->
-            Player(
-                name = name,
-                bids = MutableList(rounds){0},
-                wins = MutableList(rounds){0},
-                scores = MutableList(rounds){0}
+        players.addAll(
+            names.map{ name ->
+                Player(
+                    name = name,
+                    bids = MutableList(rounds){0},
+                    wins = MutableList(rounds){0},
+                    scores = MutableList(rounds){0}
                 )
-        }.toMutableList()
+            }
+        )
 
         startGame()
     }
@@ -81,6 +88,7 @@ class MainViewModel : ViewModel() {
 
         players.clear()
 
+        setNumPlayers(playerCount)
         rounds = floor(51f / playerCount).toInt()
 
         try {

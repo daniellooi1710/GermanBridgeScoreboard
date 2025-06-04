@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -80,6 +81,19 @@ fun GameInitScreen(
             repeat(numPlayers) { add("") }
         }
     }
+
+    LaunchedEffect(numPlayers) {
+        if (localNames.size < numPlayers) {
+            repeat(numPlayers - localNames.size) {
+                localNames.add("")
+            }
+        } else if (localNames.size > numPlayers) {
+            repeat(localNames.size - numPlayers) {
+                localNames.removeAt(localNames.lastIndex)
+            }
+        }
+    }
+
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
 
