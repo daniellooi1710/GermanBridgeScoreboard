@@ -1,6 +1,5 @@
 package com.germanbridgescoreboard.ui.bidoutcome
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,10 +21,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -187,9 +183,10 @@ fun BidsOutcomesScreen(
 ) {
     val gameProcess = viewModel.gameProcess
     val currentRound = viewModel.currentRound
-    val playerCount by remember { derivedStateOf { viewModel.players.size } }
+    val playerCount = viewModel.players.size
 
-    val localBids = rememberSaveable(playerCount,
+    val localBids = rememberSaveable(
+        key = playerCount.toString(),
         saver = listSaver(
             save = { it.toList() }, // Convert SnapshotStateList to plain List<String> for saving
             restore = { it.toMutableStateList() } // Restore back to SnapshotStateList
@@ -202,7 +199,8 @@ fun BidsOutcomesScreen(
         }
     }
 
-    val localWins = rememberSaveable(playerCount,
+    val localWins = rememberSaveable(
+        key = playerCount.toString(),
         saver = listSaver(
             save = { it.toList() }, // Convert SnapshotStateList to plain List<String> for saving
             restore = { it.toMutableStateList() } // Restore back to SnapshotStateList
@@ -215,21 +213,17 @@ fun BidsOutcomesScreen(
         }
     }
 
-    LaunchedEffect(playerCount) {
-        Log.d("LaunchedEffect", "Triggered for playerCount = $playerCount")
+    LaunchedEffect(currentRound) {
         localBids.clear()
-        repeat(playerCount) { i ->
-            localBids.add(viewModel.players.getOrNull(i)?.bids?.getOrNull(currentRound) ?: 0)
+        viewModel.players.forEach {
+            localBids.add(it.bids.getOrNull(currentRound) ?: 0)
         }
+
         localWins.clear()
-        repeat(playerCount) { i ->
-            localWins.add(viewModel.players.getOrNull(i)?.wins?.getOrNull(currentRound) ?: 0)
+        viewModel.players.forEach {
+            localWins.add(it.wins.getOrNull(currentRound) ?: 0)
         }
     }
-
-    Log.d("LocalBids", localBids.size.toString())
-    Log.d("Players", viewModel.players.size.toString())
-    Log.d("PlayerCount", playerCount.toString())
 
     val coroutineScope = rememberCoroutineScope()
     LazyColumn(

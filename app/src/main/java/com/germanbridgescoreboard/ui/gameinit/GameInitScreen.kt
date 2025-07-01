@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
@@ -23,11 +25,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +47,16 @@ import com.germanbridgescoreboard.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun PlayerNameInput(num: Int, text: String, onTextChange: (String) -> Unit){
+fun PlayerNameInput(
+    num: Int,
+    text: String,
+    onTextChange: (String) -> Unit,
+    focusRequester: FocusRequester,
+    nextFocusRequester: FocusRequester?, // null if last field
+    isLast: Boolean
+){
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Row {
         Box(
             contentAlignment = Alignment.Center,
@@ -58,8 +73,22 @@ fun PlayerNameInput(num: Int, text: String, onTextChange: (String) -> Unit){
             label = { Text("Name") },
             value = text,
             textStyle = TextStyle(fontSize = 18.sp),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = if (isLast) ImeAction.Done else ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    nextFocusRequester?.requestFocus()
+                },
+                onDone = {
+                    keyboardController?.hide()
+                }
+            ),
             onValueChange = onTextChange,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
         )
     }
 }
@@ -92,6 +121,10 @@ fun GameInitScreen(
                 localNames.removeAt(localNames.lastIndex)
             }
         }
+    }
+
+    val focusRequesters = remember(numPlayers) {
+        List(numPlayers) { FocusRequester() }
     }
 
     val coroutineScope = rememberCoroutineScope()
@@ -146,7 +179,9 @@ fun GameInitScreen(
                                 }
                             }
                             else -> {
-                                viewModel.initGame(trimmed)
+                                Snapshot.withMutableSnapshot{
+                                    viewModel.initGame(trimmed)
+                                }
                                 navController.navigate(Destination.HOME.route){
                                     launchSingleTop = true
                                     popUpTo(navController.graph.findStartDestination().id){
@@ -165,7 +200,14 @@ fun GameInitScreen(
             }
         }
         items(numPlayers){ i ->
-            PlayerNameInput(i + 1, localNames[i], onTextChange = {localNames[i] = it})
+            PlayerNameInput(
+                num = i + 1,
+                text = localNames[i],
+                onTextChange = {localNames[i] = it},
+                focusRequester = focusRequesters[i],
+                nextFocusRequester = focusRequesters.getOrNull(i + 1),
+                isLast = i == numPlayers - 1
+            )
         }
     }
 }
