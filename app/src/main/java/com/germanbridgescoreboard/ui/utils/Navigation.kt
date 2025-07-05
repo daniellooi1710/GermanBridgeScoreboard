@@ -80,7 +80,7 @@ fun NavigationBarMain(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         Destination.HOME.route -> "German Bridge Score Counter"
         Destination.BIDS.route -> "Bids & Outcomes"
         Destination.SCOREBOARD.route -> "Scoreboard"
-        else -> "Bridge Game"
+        else -> "German Bridge Score Counter"
     }
 
     Scaffold(

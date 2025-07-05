@@ -138,14 +138,14 @@ fun GameInitScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.secondaryContainer)
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 4.dp)
             ) {
                 Text(
                     text = "Input Player Names",
-                    fontSize = 24.sp,
+                    fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     modifier = Modifier
-                        .padding(start = 12.dp)
+                        .padding(start = 16.dp)
                         .align(Alignment.CenterVertically)
                 )
 

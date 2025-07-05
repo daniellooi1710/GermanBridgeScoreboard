@@ -53,11 +53,11 @@ fun ScoreTable(
         contentAlignment = Alignment.Center
     ){
         Column{
-            Row(modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)){
+            Row(modifier = Modifier.background(MaterialTheme.colorScheme.tertiaryContainer)){
                 Text(
                     "Round",
                     modifier = Modifier
-                        .width(80.dp)
+                        .width(90.dp)
                         .padding(6.dp),
                     fontSize = 24.sp,
                     style = MaterialTheme.typography.labelLarge,
@@ -68,7 +68,7 @@ fun ScoreTable(
                         text = player.name,
                         fontSize = 24.sp,
                         modifier = Modifier
-                            .width(100.dp)
+                            .width(120.dp)
                             .padding(6.dp),
                         style = MaterialTheme.typography.labelLarge,
                         textAlign = TextAlign.Center
@@ -84,9 +84,9 @@ fun ScoreTable(
                         text = (i + 1).toString(),
                         fontSize = 20.sp,
                         modifier = Modifier
-                            .width(80.dp)
+                            .width(90.dp)
                             .padding(6.dp),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.labelLarge,
                         textAlign = TextAlign.Center
                     )
                     for(j in viewModel.players.indices){
@@ -94,7 +94,7 @@ fun ScoreTable(
                             text = viewModel.players[j].scores[i].toString(),
                             fontSize = 20.sp,
                             modifier = Modifier
-                                .width(100.dp)
+                                .width(120.dp)
                                 .padding(6.dp),
                             style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center
@@ -105,12 +105,12 @@ fun ScoreTable(
 
             Spacer(Modifier.height(4.dp))
 
-            Row(modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)){
+            Row(modifier = Modifier.background(MaterialTheme.colorScheme.tertiaryContainer)){
                 Text(
                     text = "Total",
                     fontSize = 24.sp,
                     modifier = Modifier
-                        .width(80.dp)
+                        .width(90.dp)
                         .padding(6.dp),
                     style = MaterialTheme.typography.labelLarge,
                     textAlign = TextAlign.Center
@@ -120,7 +120,7 @@ fun ScoreTable(
                         text = player.total.toString(),
                         fontSize = 24.sp,
                         modifier = Modifier
-                            .width(100.dp)
+                            .width(120.dp)
                             .padding(6.dp),
                         style = MaterialTheme.typography.labelLarge,
                         textAlign = TextAlign.Center
@@ -151,7 +151,7 @@ fun RankingTable(
     ){
         Column{
             Row(
-                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer),
+                modifier = Modifier.background(MaterialTheme.colorScheme.tertiaryContainer),
                 horizontalArrangement = Arrangement.Center
             ){
                 Text(
@@ -225,7 +225,7 @@ fun ScoreboardScreen(
     else{
         Column(modifier = modifier.fillMaxSize()){
             Box(
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                 contentAlignment = Alignment.Center
             ){
                 Button(

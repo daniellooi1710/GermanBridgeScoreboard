@@ -246,7 +246,7 @@ fun BidsOutcomesScreen(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.padding(horizontal = 12.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
                     Text(
                         text = when (gameProcess) {
@@ -265,7 +265,7 @@ fun BidsOutcomesScreen(
                         },
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.padding(horizontal = 12.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 }
 
@@ -386,7 +386,7 @@ fun BidsOutcomesScreen(
                 )
             }
         }
-        items(viewModel.players.size){ i ->
+        items(viewModel.players.size) { i ->
             PlayerBidsOutcomes(
                 viewModel,
                 viewModel.players[i].name,
